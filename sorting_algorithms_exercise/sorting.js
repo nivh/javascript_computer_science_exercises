@@ -82,7 +82,34 @@ function mergeSort(arr) {
     return merge(mergeSort(arr.slice(0,midIndex)),mergeSort(arr.slice(midIndex)));
 }
 
+/**
+ * chooses a pivot, and sort the rest of the array into 2 groups:
+ * smaller numbers on the left, bigger numbers on the right (not sorted)
+ * This is a helper function for quickSort()
+ * @param {Array} arr 
+ * returns the pivot index in the final position (so the caller would know how to split this array into 2 sub-arrays)
+ */
+function pivot(arr) {
+    if (arr.length<=1) return 0;
+    // manually choose first element as pivot (could be more smart)
+    let pivotIndex=0;
+    for (var i=1; i<arr.length; i++) {
+        if (arr[i] < arr[pivotIndex]) {
+            // push it to the left of pivot
+            arr.splice(0,0,arr.splice(i,1)[0]);
+            pivotIndex++;
+        }
+    }
+    return pivotIndex;
+}
 
 //console.log(bubbleSort([4,5,1,21,2,9,10,15]));
 //console.log(bubbleSort([9,-2,0,35,4,-10,22,12]).join(','));
-console.log(insertionSort([4, 5, 1, 21, 2, 9, 10, 15]).join(','));
+//console.log(insertionSort([4, 5, 1, 21, 2, 9, 10, 15]).join(','));
+// let arr=[4, 5, 1, 21, 2, 9, 10, 15];
+// let piv=pivot(arr);
+// console.log(`Pivot index=${piv}`);
+// console.log(arr.join(','));
+// for (var i=0; i<arr.length; i++){
+//     console.log(`arr[${i}] = ${arr[i]} and it's type is: ${typeof(arr[i])}`);
+// }
