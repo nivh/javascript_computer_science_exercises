@@ -66,10 +66,15 @@ function merge (arr1,arr2) {
     return res.concat(arr1).concat(arr2);
 }
 
+/**
+ * Recursive function that sorts an array using Merge Sort algorithm
+ * uses an helper function: merge
+ * @param {Array} arr 
+ */
 function mergeSort(arr) {
     if (arr.length <= 1){
         // array with 1 element is considered sorted....
-        // also we need recursion stop condition
+        // also we need recursion stop condition, and support an empty array input
         return arr;
     }
     let midIndex=parseInt(arr.length / 2);
