@@ -52,6 +52,32 @@ function insertionSort(arr) {
     return arr;
 }
 
+/**
+ * Merge 2 sorted array into one
+ * (Helper function for MergeSort)
+ * @param {Array} arr1 
+ * @param {Array} arr2 
+ */
+function merge (arr1,arr2) {
+    let res=[]; //result array
+    while (arr1.length > 0 && arr2.length > 0) {
+        arr1[0] < arr2[0] ? res.push(arr1.shift()) : res.push(arr2.shift());
+    }
+    return res.concat(arr1).concat(arr2);
+}
+
+function mergeSort(arr) {
+    if (arr.length <= 1){
+        // array with 1 element is considered sorted....
+        // also we need recursion stop condition
+        return arr;
+    }
+    let midIndex=parseInt(arr.length / 2);
+    // merge the 2 halves together recursivly
+    return merge(mergeSort(arr.slice(0,midIndex)),mergeSort(arr.slice(midIndex)));
+}
+
+
 //console.log(bubbleSort([4,5,1,21,2,9,10,15]));
 //console.log(bubbleSort([9,-2,0,35,4,-10,22,12]).join(','));
 console.log(insertionSort([4, 5, 1, 21, 2, 9, 10, 15]).join(','));
