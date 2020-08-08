@@ -103,6 +103,20 @@ function pivot(arr) {
     return pivotIndex;
 }
 
+/**
+ * Sort an array using QuickSort algorithm.
+ * returns the sorted array.
+ * @param {Array} arr 
+ */
+function quickSort(arr) {
+    if (arr.length<=1) {
+        return arr; // Array with only 1 element is considered sorted. also recursion stop condition.
+    }
+    let pivIndex=pivot(arr);
+    // recursive call to both sides, and concatinating all elements together:
+    return quickSort(arr.slice(0,pivIndex)).concat(arr.slice(pivIndex,pivIndex+1)).concat(quickSort(arr.slice(pivIndex+1)));
+}
+
 //console.log(bubbleSort([4,5,1,21,2,9,10,15]));
 //console.log(bubbleSort([9,-2,0,35,4,-10,22,12]).join(','));
 //console.log(insertionSort([4, 5, 1, 21, 2, 9, 10, 15]).join(','));
@@ -113,3 +127,4 @@ function pivot(arr) {
 // for (var i=0; i<arr.length; i++){
 //     console.log(`arr[${i}] = ${arr[i]} and it's type is: ${typeof(arr[i])}`);
 // }
+// console.log(quickSort(arr));
