@@ -60,6 +60,18 @@ SinglyLinkedList.prototype.unshift = function(x) {
     return this;
 }
 
+/**
+ * removes a node at the beginning of the list and decrements the length of the list.
+ * This function should remove a node at the beginning of the SinglyLinkedList. It should return the node removed.
+ */
+SinglyLinkedList.prototype.shift = function () {
+    if (this.head===null) return undefined; // empty list
+    let firstNode=this.head;
+    this.head=this.head.next; // move head to the next node
+    if (this.tail===this.head) this.tail=null; // if list got empty
+    this.length--;
+    return firstNode.val;
+}
 
 // l = new SinglyLinkedList;
 // node = new Node(15);
