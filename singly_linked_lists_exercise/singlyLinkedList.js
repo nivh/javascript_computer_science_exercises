@@ -73,7 +73,73 @@ SinglyLinkedList.prototype.shift = function () {
     return firstNode.val;
 }
 
-// l = new SinglyLinkedList;
+/**
+ * This function should update the value of a node at a given index of the SinglyLinkedList. 
+ * It should return true if the node is updated successfully, or false if an invalid index is passed in.
+ * note: the list is expected to be starting from index=1 (not 0!) - according to the tests
+ * @param {number} index 
+ * @param {any} newValue 
+ */
+SinglyLinkedList.prototype.set = function (index,newValue) {
+    let node=this._getNode(index);
+    if (node===null) return false;
+    node.val=newValue 
+    return true;
+}
+
+/**
+ * This internal/helper function should find a node at a specified (zero based) index in a SinglyLinkedList. It should return the found node.
+ * @param {number} index 
+ */
+SinglyLinkedList.prototype.get = function (index) {
+    let node = this._getNode(index); 
+    return node? node.val : null;
+}
+
+/**
+ * Inner function that returns the node at a given (zero based) index.
+ * returns null if the index is invalid.
+ * @param {number} index the index of the node to retrieve
+ */
+SinglyLinkedList.prototype._getNode = function(index) {
+    if (index<0 || index >= this.length) {
+        return null;
+    }
+    let node = this.head;
+    for (var i=0; i<index; i++) {
+        node=node.next;
+    }
+    return node;
+}
+
+/**
+ * This internal/helper function should insert a node at a specified index in a SinglyLinkedList. It should return the new length of the SinglyLinkedList.
+ * @param {number} index 
+ * @param {any} newValue 
+ */
+SinglyLinkedList.prototype.insert = function (index, newValue) {
+    if (this.length===0) {
+        // empty list.... just use push
+        this.push(newValue);
+        return 0;
+    }
+    let existingNode = this._getNode(index-1); // get the one before the insertion point, so we can set it's "next" property to the new node
+    if (existingNode===null) return this.length;
+    let newNode = new Node(newValue);
+    newNode.next=existingNode.next;
+    existingNode.next=newNode;
+    this.length++;
+    return this.length;
+}
+
+l = new SinglyLinkedList;
+l.push(5).push(10).push(15).push(20);
+l.insert(2,12);
+for (var i=0; i<l.length+1; i++) {
+    console.log (l.get(i));
+}
+
+
 // node = new Node(15);
 // l.push(5).push(10).push(15).push(20);
 // l.push(-3);
