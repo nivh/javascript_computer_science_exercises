@@ -132,6 +132,36 @@ SinglyLinkedList.prototype.insert = function (index, newValue) {
     return this.length;
 }
 
+/**
+ * This function should remove a node at a specified index in a SinglyLinkedList. 
+ * It should return the removed node.
+ * @param {number} index The index of the node to be removed
+ */
+SinglyLinkedList.prototype.remove = function (index) {
+    if (index<0) return null; // should not happen... just to be robust
+    if (index===0) {
+        // should be first node... just shift() it
+        return this.shift();
+    }
+    let nodeBefore=this._getNode(index-1); // get the node before the one to remove, to link it to the nodeToBeRemoved.next
+    if (nodeBefore===null) return null; // should not happen, must be bug or wrong index input (greater then the list's length)
+    let nodeToBeRemoved = nodeBefore.next;
+   if (nodeToBeRemoved===null) return null; // node does not exist. empty list or wrong index
+   nodeBefore.next=nodeToBeRemoved.next; // link the node before to the node after. this also should cover last node (the next will be null)
+   this.length--;
+}
+
+/**
+ * This function should reverse all of the nodes in a SinglyLinkedList. 
+ * It should return the reversed SinglyLinkedList.
+ */
+SinglyLinkedList.prototype.reverse = function () {
+   if (this.length <= 1) return this;  // covers both empty list and 1 node list. stays the same...
+   
+}
+
+
+// Debug section
 l = new SinglyLinkedList;
 l.push(5).push(10).push(15).push(20);
 l.insert(2,12);
