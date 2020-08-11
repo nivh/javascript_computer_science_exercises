@@ -156,8 +156,38 @@ SinglyLinkedList.prototype.remove = function (index) {
  * It should return the reversed SinglyLinkedList.
  */
 SinglyLinkedList.prototype.reverse = function () {
-   if (this.length <= 1) return this;  // covers both empty list and 1 node list. stays the same...
-   
+	if (this.length <= 1) return this;  // covers both empty list and 1 node list. stays the same...
+	// will try to do this in one run without creating a new list from scratch
+	let lastNode = null;
+	let curNode = this.head;
+	let nextNode = curNode.next;
+	do {
+		curNode.next = lastNode;
+		
+		lastNode=curNode;
+		curNode=nextNode;
+		nextNode=nextNode.next;
+	} while (nextNode != null);
+	// do the last node:
+	curNode.next=lastNode;
+	// switch the head and the tail
+	let dumyNode=this.head;
+	this.head=this.tail;
+	this.tail=dumyNode;
+	return this;
+}
+
+/**
+ * converts the Linked List to array
+ */
+SinglyLinkedList.prototype.toArray = function () {
+	let arr=[];
+	let node=this.head;
+	while (node != null) {
+		arr.push(node.val);
+		node=node.next;
+	}
+	return arr;
 }
 
 
@@ -165,9 +195,12 @@ SinglyLinkedList.prototype.reverse = function () {
 l = new SinglyLinkedList;
 l.push(5).push(10).push(15).push(20);
 l.insert(2,12);
-for (var i=0; i<l.length+1; i++) {
-    console.log (l.get(i));
-}
+let arr=l.toArray();
+console.log(arr);
+l=l.reverse();
+arr=l.toArray();
+console.log(arr);
+
 
 
 // node = new Node(15);
