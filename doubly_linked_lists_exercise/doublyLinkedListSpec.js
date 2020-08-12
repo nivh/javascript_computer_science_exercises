@@ -7,6 +7,13 @@ beforeEach(function(){
   node = new Node(15)
 })
 
+describe('#toArray', function (){
+  it ('should generate an array from the list', function(){
+    doublyLinkedList.push(1).push(2).push(3);
+    expect(doublyLinkedList.toArray().join(',')).to.equal('1,2,3');
+  })
+})
+
 describe("#doublyLinkedList", function(){
   it("contains a head and tail that are null", function(){
     expect(doublyLinkedList.head).to.equal(null)
