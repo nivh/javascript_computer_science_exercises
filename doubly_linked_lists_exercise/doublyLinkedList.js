@@ -131,6 +131,64 @@ DoublyLinkedList.prototype.get = function (index) {
 }
 
 /**
+ * insert a node at a specified index in a DoublyLinkedList.
+ * return the new length of the DoublyLinkedList.
+ * @param {number} index index of the node to be inserted upon
+ * @param {any} val value of the new node
+ */
+DoublyLinkedList.prototype.insert = function (index, val) {
+	let n=this.findNode(index);
+	if (n===undefined) {
+		return this.length;
+	}
+	let newNode=new Node(val);
+	newNode.next=n;
+	if (n.prev === null) {
+		// newNode will be first in the list
+		this.head=newNode;
+		n.prev=newNode;
+	} else {
+		// connect prev node.next to newNode
+		n.prev.next=newNode;
+		newNode.prev=n.prev;
+		n.prev=newNode;
+	}
+	this.length++;
+	return this.length;
+}
+
+/**
+ * remove a node at a specified index in a DoublyLinkedList.
+ * return the removed node (or undefined if not found)
+ * @param {number} index the index of the node to be removed from the list
+ */
+DoublyLinkedList.prototype.remove = function(index) {
+	let n=this.findNode(index);
+	if (n===undefined) return undefined;
+	this.length--;
+	if (this.head===this.tail) {
+		// it was the last node, empty the list:
+		this.head=null;
+		this.tail=null;
+		return n.val;
+	}
+	if (n===this.head) {
+		// remove first node
+		this.head=n.next;
+		n.next.prev=null;
+	} else if (n===this.tail) {
+		// remove last node
+		this.tail=n.prev;
+		n.prev.next=null;
+	} else {
+		// there are nodes on both sides... connect prev to next
+		n.prev.next=n.next;
+		n.next.prev=n.prev;
+	}
+	return n.val
+}
+
+/**
  * Helper function.
  * Try to find the node at index.
  * returns undefined if node is not found.
@@ -154,3 +212,53 @@ DoublyLinkedList.prototype.findNode = function (index) {
 	}
 	return n;
 }
+
+/**
+ * creates an array from the list and returns it
+ * head->null
+ */
+DoublyLinkedList.prototype.toArray = function(){
+	let arr=[];
+	let n=this.head;
+	while (n!=null) {
+		arr.push(n.val);
+		n=n.next;
+	}
+	return arr;
+}
+
+/**
+ * creates an inversed array from the list and returns it
+ * null <- tail
+ */
+DoublyLinkedList.prototype.toInversedArray = function(){
+	let arr=[];
+	let n=this.tail;
+	while (n!=null) {
+		arr.push(n.val);
+		n=n.prev;
+	}
+	return arr;
+}
+
+/**
+ * General checks of the list's health:
+ * 1) compare 2 arrays to eachother - regular and reversed.
+ * 2) check that tail.next === null
+ * 3) check that head.prev === null
+ * returns true if check is OK, otherwise- false
+ */
+DoublyLinkedList.prototype.sanityCheck = function(){
+	if (this.tail && this.tail.next != null) return false;
+	if (this.head && this.head.prev != null) return false;
+	if (JSON.stringify(this.toArray()) != JSON.stringify(this.toInversedArray().reverse())) return false;
+	return true;
+}
+
+let l=new DoublyLinkedList;
+l.push(1).push(2).push(3);
+// console.log(l.toArray());
+// console.log(l.toInversedArray());
+let arr=l.toInversedArray();
+arr.reverse();
+console.log(arr);

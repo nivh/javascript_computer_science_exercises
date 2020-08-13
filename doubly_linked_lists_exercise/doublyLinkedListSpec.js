@@ -47,11 +47,13 @@ describe("#push", function(){
     doublyLinkedList.push(15)
     expect(doublyLinkedList.length).to.equal(3)
     expect(doublyLinkedList.head.next.next.val).to.equal(15)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
   it("returns the doublyLinkedList so that the method can be chained", function(){
     doublyLinkedList.push(5).push(10).push(15)
     expect(doublyLinkedList.length).to.equal(3)
     expect(doublyLinkedList.head.next.next.val).to.equal(15)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
 });
 
@@ -61,10 +63,12 @@ describe("#pop", function(){
     expect(doublyLinkedList.length).to.equal(4)
     expect(doublyLinkedList.pop()).to.equal(20)
     expect(doublyLinkedList.length).to.equal(3)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
   it("returns undefined if there are no nodes to remove", function(){
     expect(doublyLinkedList.pop()).to.equal(undefined)
     expect(doublyLinkedList.length).to.equal(0)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
 });
 
@@ -82,11 +86,13 @@ describe("#unshift", function(){
    expect(doublyLinkedList.head.val).to.equal(15)
    expect(doublyLinkedList.head.next.val).to.equal(10)
    expect(doublyLinkedList.head.next.next.val).to.equal(5)
+   expect(doublyLinkedList.sanityCheck()).to.equal(true)
  });
  it("returns the doublyLinkedList so that the method can be chained", function(){
    doublyLinkedList.unshift(5).unshift(10).unshift(15)
    expect(doublyLinkedList.length).to.equal(3)
    expect(doublyLinkedList.head.next.next.val).to.equal(5)
+   expect(doublyLinkedList.sanityCheck()).to.equal(true)
  });
 });
 
@@ -102,10 +108,12 @@ describe("#shift", function(){
     expect(doublyLinkedList.length).to.equal(1)
     expect(doublyLinkedList.shift()).to.equal(20)
     expect(doublyLinkedList.length).to.equal(0)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
   it("returns undefined if there are no nodes to remove", function(){
     expect(doublyLinkedList.shift()).to.equal(undefined)
     expect(doublyLinkedList.length).to.equal(0)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
 });
 
@@ -126,6 +134,7 @@ describe("#set", function(){
     doublyLinkedList.set(3,55)
     expect(doublyLinkedList.length).to.equal(4)
     expect(doublyLinkedList.tail.val).to.equal(55)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
 });
 
@@ -137,6 +146,7 @@ describe("#_get", function(){
     expect(doublyLinkedList.get(2)).to.equal(15)
     expect(doublyLinkedList.get(3)).to.equal(20)
     expect(doublyLinkedList.get(4)).to.equal(null)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
 });
 
@@ -150,6 +160,7 @@ describe("#_insert", function(){
     expect(doublyLinkedList.head.next.next.val).to.equal(12)
     expect(doublyLinkedList.head.next.next.next.val).to.equal(15)
     expect(doublyLinkedList.head.next.next.next.next.val).to.equal(20)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
 });
 
@@ -161,6 +172,7 @@ describe("#remove", function(){
     expect(doublyLinkedList.head.val).to.equal(5)
     expect(doublyLinkedList.head.next.val).to.equal(10)
     expect(doublyLinkedList.head.next.next.val).to.equal(20)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
 });
 
@@ -173,5 +185,6 @@ describe("#reverse", function(){
     expect(doublyLinkedList.head.next.val).to.equal(15)
     expect(doublyLinkedList.head.next.next.val).to.equal(10)
     expect(doublyLinkedList.head.next.next.next.val).to.equal(5)
+    expect(doublyLinkedList.sanityCheck()).to.equal(true)
   });
 });
