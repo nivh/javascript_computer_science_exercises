@@ -87,3 +87,22 @@ DoublyLinkedList.prototype.unshift = function (val) {
 	this.length++;
 	return this;
 }
+
+/**
+ * This function should remove a node at the beginning of the DoublyLinkedList. 
+ * It should return the node removed.
+ */
+DoublyLinkedList.prototype.shift = function () {
+	if (this.length === 0) return undefined; // empty list
+	let val=this.head.val; // save the head node value to return
+	if (this.head.next != null) {
+		this.head.next.prev=null;
+		this.head=this.head.next;
+	} else {
+		// it was the last node
+		this.tail=null;
+		this.head=null;
+	}
+	this.length--;
+	return val;
+}
