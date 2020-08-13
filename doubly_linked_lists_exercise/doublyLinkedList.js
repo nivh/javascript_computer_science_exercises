@@ -67,3 +67,23 @@ DoublyLinkedList.prototype.pop = function () {
 	this.length--;
 	return val;
 }
+
+/**
+ * This function should add a node to the beginning of the DoublyLinkedList. 
+ * It should return the list so that the method can be chained.
+ * @param {any} val new value to add to the beginning of the list
+ */
+DoublyLinkedList.prototype.unshift = function (val) {
+	let newNode = new Node(val);
+	if (this.length===0) {
+		// empty list
+		this.tail=newNode; // set tail to also point to the new node
+	} else {
+		// at least 1 node exist... point it's prev to the new node
+		this.head.prev=newNode;
+		newNode.next=this.head;
+	}
+	this.head=newNode;
+	this.length++;
+	return this;
+}
