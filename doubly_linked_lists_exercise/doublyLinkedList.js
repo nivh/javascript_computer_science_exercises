@@ -48,3 +48,22 @@ DoublyLinkedList.prototype.push = function (val) {
    this.length++;
    return this;
 }
+
+/**
+ * This function should remove a node at the end of the DoublyLinkedList. 
+ * It should return the node removed.
+ */
+DoublyLinkedList.prototype.pop = function () {
+	if (this.length === 0) return undefined; // empty list
+	let val=this.tail.val; // save the tail node value to return
+	if (this.tail.prev != null) {
+		this.tail.prev.next=null;
+		this.tail=this.tail.prev;
+	} else {
+		// it was the last node
+		this.tail=null;
+		this.head=null;
+	}
+	this.length--;
+	return val;
+}
