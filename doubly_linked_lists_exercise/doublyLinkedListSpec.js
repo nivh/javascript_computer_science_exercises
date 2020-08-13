@@ -116,12 +116,16 @@ describe("#set", function(){
     doublyLinkedList.set(0,10)
     expect(doublyLinkedList.length).to.equal(4)
     expect(doublyLinkedList.head.val).to.equal(10)
-    doublyLinkedList.set(10,10)
+    let res=doublyLinkedList.set(10,10)
+    expect(res).to.equal(undefined)
     expect(doublyLinkedList.length).to.equal(4)
     expect(doublyLinkedList.head.val).to.equal(10)
     doublyLinkedList.set(2,100)
     expect(doublyLinkedList.length).to.equal(4)
     expect(doublyLinkedList.head.next.next.val).to.equal(100)
+    doublyLinkedList.set(3,55)
+    expect(doublyLinkedList.length).to.equal(4)
+    expect(doublyLinkedList.tail.val).to.equal(55)
   });
 });
 

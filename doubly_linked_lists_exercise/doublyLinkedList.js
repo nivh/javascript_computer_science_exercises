@@ -106,3 +106,40 @@ DoublyLinkedList.prototype.shift = function () {
 	this.length--;
 	return val;
 }
+
+/**
+ * This function should find a node and replace its val or return undefined if the node is not found.
+ * @param {number} index the index of the node
+ * @param {any} val vlaue to set
+ */
+DoublyLinkedList.prototype.set = function (index, val) {
+	let n=this.findNode(index);
+	if (n===undefined) return undefined;
+	n.val=val;
+	return;
+}
+
+/**
+ * Helper function.
+ * Try to find the node at index.
+ * returns undefined if node is not found.
+ * @param {number} index index of the node to find
+ */
+DoublyLinkedList.prototype.findNode = function (index) {
+	let len=this.length;
+	if (index >= len) return undefined; // index is larger then the length of the list
+	if (index > len/2) {
+		// search from tail backwards
+		let n=this.tail;
+		for (var i=len-1; i>index; i--){
+			n=n.prev;
+		}
+		return n;
+	}
+	// search from head forwards
+	let n=this.head;
+	for (var i=0; i<index; i++){
+		n=n.next;
+	}
+	return n;
+}
