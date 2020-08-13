@@ -120,6 +120,17 @@ DoublyLinkedList.prototype.set = function (index, val) {
 }
 
 /**
+ * find a node at a specified index in a DoublyLinkedList. 
+ * It should return the found node, or null if not.
+ * @param {number} index index of the node to retrieve it's value
+ */
+DoublyLinkedList.prototype.get = function (index) {
+	let n=this.findNode(index);
+	if (n===undefined) return null;
+	return n.val;
+}
+
+/**
  * Helper function.
  * Try to find the node at index.
  * returns undefined if node is not found.
