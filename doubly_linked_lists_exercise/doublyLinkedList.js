@@ -189,6 +189,35 @@ DoublyLinkedList.prototype.remove = function(index) {
 }
 
 /**
+ * Flip values ov node between prev and next
+ * @param {Node} node the node to flip values to
+ */
+function flip(node) {
+	let dumy=node.next;
+	node.next=node.prev;
+	node.prev=dumy;
+}
+
+/**
+ * reverse all of the nodes in a DoublyLinkedList.
+ * return the reversed DoublyLinkedList.
+ */
+DoublyLinkedList.prototype.reverse = function () {
+	if (this.length<=1) return this; // nothing changes in 1 or 0 length list...
+	// flip all connections
+	let cur=this.head;
+	while (cur != null){
+		flip(cur);
+		cur=cur.prev; // cause of the flip...
+	}
+	// flip head <-> tail
+	let dumy=this.head;
+	this.head=this.tail;
+	this.tail=dumy;
+	return this;
+}
+
+/**
  * Helper function.
  * Try to find the node at index.
  * returns undefined if node is not found.
@@ -259,6 +288,6 @@ let l=new DoublyLinkedList;
 l.push(1).push(2).push(3);
 // console.log(l.toArray());
 // console.log(l.toInversedArray());
-let arr=l.toInversedArray();
-arr.reverse();
+l.reverse();
+let arr=l.toArray();
 console.log(arr);
