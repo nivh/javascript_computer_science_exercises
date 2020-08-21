@@ -40,12 +40,31 @@ Stack.prototype.pop = function () {
     return val;
 }
 
+/**
+ * This function returns the first value in the stack.
+ */
+Stack.prototype.peek = function () {
+    return this.first ? this.first.value : null;
+}
+
+/**
+ * This function console.log's all the values in the stack.
+ */
+Stack.prototype.print = function () {
+    let n=this.first;
+    while (n!=null) {
+        console.log(n.value);
+        n=n.next;
+    }
+}
+
 
 // Debug
 let s=new Stack();
 s.push(10);
 s.push(100);
 s.push(1000);
+s.print();
 var r = s.pop()
 s.pop();
 s.pop();
