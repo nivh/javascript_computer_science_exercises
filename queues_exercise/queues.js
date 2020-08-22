@@ -46,6 +46,13 @@ Queue.prototype.dequeue = function () {
 }
 
 /**
+ * This function returns the first value in the queue.
+ */
+Queue.prototype.peek = function () {
+    return this.first ? this.first.value : null;
+}
+
+/**
  * Convert the queue to array, starting from first.
  */
 Queue.prototype.toArray = function () {
@@ -68,7 +75,7 @@ Queue.prototype.print = function () {
 }
 
 // Debug
-let q=new Queue();
+let q = new Queue();
 q.enqueue(1);
 q.enqueue(2);
 q.enqueue(3);
