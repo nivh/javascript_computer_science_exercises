@@ -1,3 +1,4 @@
+// @ts-check
 "use strict"
 
 /**
@@ -36,10 +37,45 @@ Queue.prototype.enqueue = function (value) {
  * This should be an O(1) operation and return the value removed.
  */
 Queue.prototype.dequeue = function () {
-    if (this.size===0) return null; // empty Queue
-    let val=this.first.val;
-    this.first=this.first.next;
-    if (!this.first) this.last=null; // was last Node
+    if (this.size === 0) return null; // empty Queue
+    let val = this.first.value;
+    this.first = this.first.next;
+    if (!this.first) this.last = null; // was last Node
     this.size--;
     return val;
 }
+
+/**
+ * Convert the queue to array, starting from first.
+ */
+Queue.prototype.toArray = function () {
+    let n = this.first;
+    let arr = [];
+    while (n != null) {
+        arr.push(n.value);
+        n = n.next;
+    }
+    return arr;
+}
+
+/**
+ * print the Queue to the console
+ */
+Queue.prototype.print = function () {
+    console.log(`first -> ${this.first ? this.first.value : null}`);
+    console.log(this.toArray().join(' -> '));
+    console.log(`last -> ${this.last ? this.last.value : null}`);
+}
+
+// Debug
+let q=new Queue();
+q.enqueue(1);
+q.enqueue(2);
+q.enqueue(3);
+q.print();
+console.log(`value= ${q.dequeue()}`);
+q.print();
+q.dequeue();
+q.print();
+q.dequeue();
+q.print();
