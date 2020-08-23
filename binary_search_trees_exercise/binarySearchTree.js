@@ -24,7 +24,7 @@ BinarySearchTree.prototype.insertIteratively = function (val) {
         return this;
     }
     while (true) {
-        if (val <= n.value) {
+        if (val < n.value) {
             // search left branch
             if (n.left) {
                 n = n.left;
@@ -40,6 +40,34 @@ BinarySearchTree.prototype.insertIteratively = function (val) {
                 n.right = newNode;
                 return this;
             }
+        }
+    }
+}
+
+/**
+ * insert a node in a binary tree. 
+ * This should be solved using recursion.
+ * @param {any} val value to insert to the tree
+ */
+BinarySearchTree.prototype.insertRecursively = function (val) {
+    let newNode=new Node(val);
+    if (this.root===null) {
+        this.root=newNode;
+        return this;
+    }
+    insertNode(newNode, this.root);
+    return this;
+    /**
+     * Recursive function to insert a value into a general root node
+     * @param {Node} newNode new node to insert
+     * @param {Node} rootNode root node of tree
+     */
+    function insertNode (newNode, rootNode) {
+        if (newNode.value < rootNode.value) {
+            // search left branch
+            rootNode.left ? insertNode(newNode, rootNode.left) : rootNode.left=newNode;
+        } else {
+            rootNode.right ? insertNode(newNode, rootNode.right) : rootNode.right=newNode;
         }
     }
 }
