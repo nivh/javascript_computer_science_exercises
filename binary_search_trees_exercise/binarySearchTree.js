@@ -129,6 +129,30 @@ BinarySearchTree.prototype.findRecursively = function (val) {
 }
 
 /**
+ * convert a binary search tree into an array of nodes from smallest to largest.
+ */
+BinarySearchTree.prototype.toArray = function() {
+	if (this.root===null) return [];
+	return nodeToArray(this.root);
+	/**
+	 * recursive function to convert a binary tree to array
+	 * @param {Node} rootNode Root node of tree to convert to array
+	 */
+	function nodeToArray (rootNode) {
+		let leftSide=[];
+		let rightSide=[];
+		if (rootNode.left) {
+			leftSide=nodeToArray(rootNode.left);
+		}
+		if (rootNode.right) {
+			rightSide=nodeToArray(rootNode.right);
+		}
+		leftSide.push(rootNode.value); // add the root node itself...
+		return leftSide.concat(rightSide); // return left + root + right
+	}
+}
+
+/**
  * Print branch recursive function
  * @param {Node} node the root node from which to begin printing
  */
@@ -148,9 +172,11 @@ BinarySearchTree.prototype.print = function () {
 
 // debug
 let t = new BinarySearchTree();
-t.insertIteratively(8);
-t.insertIteratively(5);
-t.insertIteratively(6);
+t.insertIteratively(15);
+t.insertIteratively(20);
 t.insertIteratively(10);
-t.insertIteratively(3);
-t.print();
+t.insertIteratively(12);
+t.insertIteratively(1);
+t.insertIteratively(5);
+t.insertIteratively(50);
+console.log(t.toArray());
