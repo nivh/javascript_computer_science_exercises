@@ -153,6 +153,51 @@ BinarySearchTree.prototype.toArray = function() {
 }
 
 /**
+ * search through each node in the binary search tree using pre-order depth first search and 
+ * return an array containing each node's value.
+ */
+BinarySearchTree.prototype.DFSPreOrder = function () {
+	let arr=[];
+	traverse(this.root);
+	return arr;
+	function traverse (rootNode) {
+		if (rootNode) arr.push(rootNode.value); // record the value
+		if (rootNode.left) traverse(rootNode.left); // traverse the left branch
+		if (rootNode.right) traverse(rootNode.right); // traverse the right branch
+	}
+}
+
+/**
+ * search through each node in the binary search tree using in-order depth first search and 
+ * return an array containing each node's value.
+ */
+BinarySearchTree.prototype.DFSInOrder = function () {
+	let arr=[];
+	traverse(this.root);
+	return arr;
+	function traverse (rootNode) {
+		if (rootNode.left) traverse(rootNode.left); // traverse the left branch
+		if (rootNode) arr.push(rootNode.value); // record the value
+		if (rootNode.right) traverse(rootNode.right); // traverse the right branch
+	}
+}
+
+/**
+ * search through each node in the binary search tree using post-order depth first search and 
+ * return an array containing each node's value.
+ */
+BinarySearchTree.prototype.DFSPostOrder = function () {
+	let arr=[];
+	traverse(this.root);
+	return arr;
+	function traverse (rootNode) {
+		if (rootNode.left) traverse(rootNode.left); // traverse the left branch
+		if (rootNode.right) traverse(rootNode.right); // traverse the right branch
+		if (rootNode) arr.push(rootNode.value); // record the value
+	}
+}
+
+/**
  * Print branch recursive function
  * @param {Node} node the root node from which to begin printing
  */
