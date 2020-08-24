@@ -17,6 +17,7 @@ function BinarySearchTree() {
  * @param {any} val Value to insert to the tree
  */
 BinarySearchTree.prototype.insertIteratively = function (val) {
+    // @ts-ignore
     let newNode = new Node(val);
     let n = this.root;
     if (n === null) {
@@ -24,17 +25,23 @@ BinarySearchTree.prototype.insertIteratively = function (val) {
         return this;
     }
     while (true) {
+        // @ts-ignore
         if (val < n.value) {
             // search left branch
+            // @ts-ignore
             if (n.left) {
+                // @ts-ignore
                 n = n.left;
             } else {
+                // @ts-ignore
                 n.left = newNode;
                 return this;
             }
         } else {
             // search right branch
+            // @ts-ignore
             if (n.right) {
+                // @ts-ignore
                 n = n.right;
             } else {
                 n.right = newNode;
@@ -209,10 +216,39 @@ BinarySearchTree.prototype.breadthFirstSearch = function() {
 		if (n) {
 			arr.push(n.value); // record the value
 			if (n.left) q.push(n.left);
+			// @ts-ignore
 			if (n.right) q.push(n.right);
 		}
 	}
 	return arr;
+}
+
+/**
+ * finds and returns the Node with the minimum value on a branch.
+ * (this is similar to finding the left most node within a branch);
+ * this is a helper function for remove() method.
+ * @param {Node} root the root of the branch to search
+ */
+function findMinInBST (root) {
+	if (!root) return null;
+	let n=root;
+	while (n.left) {
+		n=n.left;
+	}
+	return n;
+}
+
+/**
+ * This function should remove a node from a binary search tree. 
+ * Your remove function should be able to handle removal of the root node, removal of a node with one child and removal of a node with two children. 
+ * The function should return the node removed.
+ * @param {any} val value to remove from the tree
+ */
+BinarySearchTree.prototype.remove = function (val) {
+	// find the Node with the value
+	let n=this.findRecursively(val);
+	if (!n) return undefined;
+
 }
 
 /**
@@ -243,3 +279,4 @@ t.insertIteratively(1);
 t.insertIteratively(5);
 t.insertIteratively(50);
 console.log(t.toArray());
+console.log(`min: ${findMinInBST(t.root.left).value}`);
