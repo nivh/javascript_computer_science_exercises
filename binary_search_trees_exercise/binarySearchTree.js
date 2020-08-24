@@ -50,9 +50,9 @@ BinarySearchTree.prototype.insertIteratively = function (val) {
  * @param {any} val value to insert to the tree
  */
 BinarySearchTree.prototype.insertRecursively = function (val) {
-    let newNode=new Node(val);
-    if (this.root===null) {
-        this.root=newNode;
+    let newNode = new Node(val);
+    if (this.root === null) {
+        this.root = newNode;
         return this;
     }
     insertNode(newNode, this.root);
@@ -62,12 +62,68 @@ BinarySearchTree.prototype.insertRecursively = function (val) {
      * @param {Node} newNode new node to insert
      * @param {Node} rootNode root node of tree
      */
-    function insertNode (newNode, rootNode) {
+    function insertNode(newNode, rootNode) {
         if (newNode.value < rootNode.value) {
             // search left branch
-            rootNode.left ? insertNode(newNode, rootNode.left) : rootNode.left=newNode;
+            rootNode.left ? insertNode(newNode, rootNode.left) : rootNode.left = newNode;
         } else {
-            rootNode.right ? insertNode(newNode, rootNode.right) : rootNode.right=newNode;
+            rootNode.right ? insertNode(newNode, rootNode.right) : rootNode.right = newNode;
+        }
+    }
+}
+
+/**
+ * find a node in a binary tree. 
+ * It should return the node if found, otherwise return `undefined`. 
+ * This should be solved using iteration.
+ * @param {any} val value to search
+ */
+BinarySearchTree.prototype.findIteratively = function (val) {
+    let n = this.root;
+    while (n != null) {
+        if (val === n.value) return n;
+        if (val < n.value) {
+            // left side
+            if (n.left) { 
+                n=n.left;
+            } else { 
+                return undefined;
+            }
+        } else {
+            // right side
+            if (n.right) {
+                n=n.right 
+            } else { 
+                return undefined;
+            }
+        }
+    }
+}
+
+BinarySearchTree.prototype.findRecursively = function (val) {
+    return findNode(val, this.root);
+    /**
+     * Recursive function to find a value in a BinarySearchTree starting with rootNode
+     * returns the Node if found, otherwise: undefined
+     * @param {any} val value to find
+     * @param {Node} rootNode Starting root node
+     */
+    function findNode (val, rootNode) {
+        if (val === rootNode.value) return rootNode;
+        if (val < rootNode.value) {
+            // left branch
+            if (rootNode.left) {
+                return findNode (val, rootNode.left);
+            } else {
+                return undefined;
+            }
+        } else {
+            // right branch
+            if (rootNode.right) {
+                return findNode(val, rootNode.right);
+            } else {
+                return undefined;
+            }
         }
     }
 }
@@ -77,7 +133,7 @@ BinarySearchTree.prototype.insertRecursively = function (val) {
  * @param {Node} node the root node from which to begin printing
  */
 BinarySearchTree.prototype.printBranch = function (node) {
-    if (node===null) return;
+    if (node === null) return;
     console.log(node.value);
     if (node.left) this.printBranch(node.left);
     if (node.right) this.printBranch(node.right);
@@ -91,7 +147,7 @@ BinarySearchTree.prototype.print = function () {
 }
 
 // debug
-let t=new BinarySearchTree();
+let t = new BinarySearchTree();
 t.insertIteratively(8);
 t.insertIteratively(5);
 t.insertIteratively(6);
