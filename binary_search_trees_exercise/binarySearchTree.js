@@ -198,6 +198,24 @@ BinarySearchTree.prototype.DFSPostOrder = function () {
 }
 
 /**
+ * search through each node in the binary search tree using breadth first search and 
+ * return an array containing each node's value.
+ */
+BinarySearchTree.prototype.breadthFirstSearch = function() {
+	let arr=[];
+	let q=[this.root]; // Queue of nodes
+	while (q.length>0) {
+		let n=q.shift();
+		if (n) {
+			arr.push(n.value); // record the value
+			if (n.left) q.push(n.left);
+			if (n.right) q.push(n.right);
+		}
+	}
+	return arr;
+}
+
+/**
  * Print branch recursive function
  * @param {Node} node the root node from which to begin printing
  */
