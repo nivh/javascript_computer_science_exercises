@@ -91,16 +91,16 @@ BinarySearchTree.prototype.findIteratively = function (val) {
         if (val === n.value) return n;
         if (val < n.value) {
             // left side
-            if (n.left) { 
-                n=n.left;
-            } else { 
+            if (n.left) {
+                n = n.left;
+            } else {
                 return undefined;
             }
         } else {
             // right side
             if (n.right) {
-                n=n.right 
-            } else { 
+                n = n.right
+            } else {
                 return undefined;
             }
         }
@@ -115,12 +115,12 @@ BinarySearchTree.prototype.findRecursively = function (val) {
      * @param {any} val value to find
      * @param {Node} rootNode Starting root node
      */
-    function findNode (val, rootNode) {
+    function findNode(val, rootNode) {
         if (val === rootNode.value) return rootNode;
         if (val < rootNode.value) {
             // left branch
             if (rootNode.left) {
-                return findNode (val, rootNode.left);
+                return findNode(val, rootNode.left);
             } else {
                 return undefined;
             }
@@ -138,25 +138,25 @@ BinarySearchTree.prototype.findRecursively = function (val) {
 /**
  * convert a binary search tree into an array of nodes from smallest to largest.
  */
-BinarySearchTree.prototype.toArray = function() {
-	if (this.root===null) return [];
-	return nodeToArray(this.root);
+BinarySearchTree.prototype.toArray = function () {
+    if (this.root === null) return [];
+    return nodeToArray(this.root);
 	/**
 	 * recursive function to convert a binary tree to array
 	 * @param {Node} rootNode Root node of tree to convert to array
 	 */
-	function nodeToArray (rootNode) {
-		let leftSide=[];
-		let rightSide=[];
-		if (rootNode.left) {
-			leftSide=nodeToArray(rootNode.left);
-		}
-		if (rootNode.right) {
-			rightSide=nodeToArray(rootNode.right);
-		}
-		leftSide.push(rootNode.value); // add the root node itself...
-		return leftSide.concat(rightSide); // return left + root + right
-	}
+    function nodeToArray(rootNode) {
+        let leftSide = [];
+        let rightSide = [];
+        if (rootNode.left) {
+            leftSide = nodeToArray(rootNode.left);
+        }
+        if (rootNode.right) {
+            rightSide = nodeToArray(rootNode.right);
+        }
+        leftSide.push(rootNode.value); // add the root node itself...
+        return leftSide.concat(rightSide); // return left + root + right
+    }
 }
 
 /**
@@ -164,14 +164,14 @@ BinarySearchTree.prototype.toArray = function() {
  * return an array containing each node's value.
  */
 BinarySearchTree.prototype.DFSPreOrder = function () {
-	let arr=[];
-	traverse(this.root);
-	return arr;
-	function traverse (rootNode) {
-		if (rootNode) arr.push(rootNode.value); // record the value
-		if (rootNode.left) traverse(rootNode.left); // traverse the left branch
-		if (rootNode.right) traverse(rootNode.right); // traverse the right branch
-	}
+    let arr = [];
+    traverse(this.root);
+    return arr;
+    function traverse(rootNode) {
+        if (rootNode) arr.push(rootNode.value); // record the value
+        if (rootNode.left) traverse(rootNode.left); // traverse the left branch
+        if (rootNode.right) traverse(rootNode.right); // traverse the right branch
+    }
 }
 
 /**
@@ -179,14 +179,14 @@ BinarySearchTree.prototype.DFSPreOrder = function () {
  * return an array containing each node's value.
  */
 BinarySearchTree.prototype.DFSInOrder = function () {
-	let arr=[];
-	traverse(this.root);
-	return arr;
-	function traverse (rootNode) {
-		if (rootNode.left) traverse(rootNode.left); // traverse the left branch
-		if (rootNode) arr.push(rootNode.value); // record the value
-		if (rootNode.right) traverse(rootNode.right); // traverse the right branch
-	}
+    let arr = [];
+    traverse(this.root);
+    return arr;
+    function traverse(rootNode) {
+        if (rootNode.left) traverse(rootNode.left); // traverse the left branch
+        if (rootNode) arr.push(rootNode.value); // record the value
+        if (rootNode.right) traverse(rootNode.right); // traverse the right branch
+    }
 }
 
 /**
@@ -194,33 +194,33 @@ BinarySearchTree.prototype.DFSInOrder = function () {
  * return an array containing each node's value.
  */
 BinarySearchTree.prototype.DFSPostOrder = function () {
-	let arr=[];
-	traverse(this.root);
-	return arr;
-	function traverse (rootNode) {
-		if (rootNode.left) traverse(rootNode.left); // traverse the left branch
-		if (rootNode.right) traverse(rootNode.right); // traverse the right branch
-		if (rootNode) arr.push(rootNode.value); // record the value
-	}
+    let arr = [];
+    traverse(this.root);
+    return arr;
+    function traverse(rootNode) {
+        if (rootNode.left) traverse(rootNode.left); // traverse the left branch
+        if (rootNode.right) traverse(rootNode.right); // traverse the right branch
+        if (rootNode) arr.push(rootNode.value); // record the value
+    }
 }
 
 /**
  * search through each node in the binary search tree using breadth first search and 
  * return an array containing each node's value.
  */
-BinarySearchTree.prototype.breadthFirstSearch = function() {
-	let arr=[];
-	let q=[this.root]; // Queue of nodes
-	while (q.length>0) {
-		let n=q.shift();
-		if (n) {
-			arr.push(n.value); // record the value
-			if (n.left) q.push(n.left);
-			// @ts-ignore
-			if (n.right) q.push(n.right);
-		}
-	}
-	return arr;
+BinarySearchTree.prototype.breadthFirstSearch = function () {
+    let arr = [];
+    let q = [this.root]; // Queue of nodes
+    while (q.length > 0) {
+        let n = q.shift();
+        if (n) {
+            arr.push(n.value); // record the value
+            if (n.left) q.push(n.left);
+            // @ts-ignore
+            if (n.right) q.push(n.right);
+        }
+    }
+    return arr;
 }
 
 /**
@@ -229,26 +229,48 @@ BinarySearchTree.prototype.breadthFirstSearch = function() {
  * this is a helper function for remove() method.
  * @param {Node} root the root of the branch to search
  */
-function findMinInBST (root) {
-	if (!root) return null;
-	let n=root;
-	while (n.left) {
-		n=n.left;
-	}
-	return n;
+function findMinInBST(root) {
+    if (!root) return null;
+    let n = root;
+    while (n.left) {
+        n = n.left;
+    }
+    return n;
 }
 
 /**
- * This function should remove a node from a binary search tree. 
+ * This function should remove a node from a binary search tree recursively
  * Your remove function should be able to handle removal of the root node, removal of a node with one child and removal of a node with two children. 
  * The function should return the node removed.
  * @param {any} val value to remove from the tree
+ * @param {Node} root root of the branch to remove the Node from
  */
-BinarySearchTree.prototype.remove = function (val) {
-	// find the Node with the value
-	let n=this.findRecursively(val);
-	if (!n) return undefined;
-
+BinarySearchTree.prototype.remove = function (val, root = this.root) {
+    // find the Node with the value
+    // todo: make a recursive remove node from branch, that also finds the node to be removed
+    if (val < root.val) {
+        // left branch search
+        if (root.left) {
+            root.left = this.remove(val, root.left);
+        } // else - val does not exist. should do anything?
+    } else if (val > root.val) {
+        // right branch search
+        if (root.right) {
+            root.right = this.remove(val, root.right);
+        } // else - val does not exist. should do anything?
+    } else {
+        // Node to be removed found!
+        // deal with 3 cases:
+        // 1) no childs - just return the root
+        if (!root.left && !root.right) return root;
+        // 2) 1 child - return this 1 child
+        if (root.left || root.right) {
+            if (root.left) return root.left;
+            if (root.right) return root.right;
+        }
+        // 3) 2 childs - return the successor - search the right branch for the left most node (IE: min value) and return that
+        return findMinInBST(root.right);
+    }
 }
 
 /**
