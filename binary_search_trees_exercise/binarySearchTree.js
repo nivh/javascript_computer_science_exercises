@@ -165,7 +165,7 @@ BinarySearchTree.prototype.toArray = function () {
  */
 BinarySearchTree.prototype.DFSPreOrder = function () {
     let arr = [];
-    traverse(this.root);
+    if (this.root) traverse(this.root);
     return arr;
     function traverse(rootNode) {
         if (rootNode) arr.push(rootNode.value); // record the value
@@ -180,7 +180,7 @@ BinarySearchTree.prototype.DFSPreOrder = function () {
  */
 BinarySearchTree.prototype.DFSInOrder = function () {
     let arr = [];
-    traverse(this.root);
+    if (this.root) traverse(this.root);
     return arr;
     function traverse(rootNode) {
         if (rootNode.left) traverse(rootNode.left); // traverse the left branch
@@ -195,7 +195,7 @@ BinarySearchTree.prototype.DFSInOrder = function () {
  */
 BinarySearchTree.prototype.DFSPostOrder = function () {
     let arr = [];
-    traverse(this.root);
+    if (this.root) traverse(this.root);
     return arr;
     function traverse(rootNode) {
         if (rootNode.left) traverse(rootNode.left); // traverse the left branch
@@ -243,33 +243,46 @@ function findMinInBST(root) {
  * Your remove function should be able to handle removal of the root node, removal of a node with one child and removal of a node with two children. 
  * The function should return the node removed.
  * @param {any} val value to remove from the tree
- * @param {Node} root root of the branch to remove the Node from
  */
-BinarySearchTree.prototype.remove = function (val, root = this.root) {
+BinarySearchTree.prototype.remove = function (val) {
     // find the Node with the value
+    let nodeToRemove = this.findRecursively(val);
+    if (!nodeToRemove) return null; // node does not exist in this tree
     // todo: make a recursive remove node from branch, that also finds the node to be removed
-    if (val < root.val) {
-        // left branch search
-        if (root.left) {
-            root.left = this.remove(val, root.left);
-        } // else - val does not exist. should do anything?
-    } else if (val > root.val) {
-        // right branch search
-        if (root.right) {
-            root.right = this.remove(val, root.right);
-        } // else - val does not exist. should do anything?
-    } else {
-        // Node to be removed found!
-        // deal with 3 cases:
-        // 1) no childs - just return the root
-        if (!root.left && !root.right) return root;
-        // 2) 1 child - return this 1 child
-        if (root.left || root.right) {
-            if (root.left) return root.left;
-            if (root.right) return root.right;
+    removeNode(val, this.root);
+
+    function removeNode(val, root) {
+        if (val < root.value) {
+            // left branch search
+            if (root.left) {
+                root.left = removeNode(val, root.left);
+            } // else - val does not exist. should do anything?
+        } else if (val > root.value) {
+            // right branch search
+            if (root.right) {
+                root.right = removeNode(val, root.right);
+            } // else - val does not exist. should do anything?
+        } else {
+            // Node to be removed found!
+            // deal with 3 cases:
+            // 1) no childs - just return null
+            if (!root.left && !root.right) return null;
+            // 2) 1 child - return this 1 child
+            if ((root.left === null) != (root.right === null)) { // XOR look alike
+                if (root.left) return root.left;
+                if (root.right) return root.right;
+            }
+            // 3) 2 childs - return the successor - search the right branch for the left most node (IE: min value) and replace the root note with it
+            // find the successor:
+            let suc = findMinInBST(root.right);
+
+            // replace the original node:
+            suc.right = removeNode(suc.value, root.right);
+            suc.left = root.left;
+
+            return suc;
         }
-        // 3) 2 childs - return the successor - search the right branch for the left most node (IE: min value) and return that
-        return findMinInBST(root.right);
+        //return root;
     }
 }
 
@@ -293,12 +306,25 @@ BinarySearchTree.prototype.print = function () {
 
 // debug
 let t = new BinarySearchTree();
-t.insertIteratively(15);
-t.insertIteratively(20);
-t.insertIteratively(10);
-t.insertIteratively(12);
-t.insertIteratively(1);
+// t.insertIteratively(15);
+// t.insertIteratively(20);
+// t.insertIteratively(10);
+// t.insertIteratively(12);
+// t.insertIteratively(1);
+// t.insertIteratively(5);
+// t.insertIteratively(50);
+// t.insertIteratively(60);
+// t.insertIteratively(30);
+// t.insertIteratively(25);
+// t.insertIteratively(23);
+// t.insertIteratively(24);
+// t.insertIteratively(70);
+// t.insertIteratively(55);
 t.insertIteratively(5);
-t.insertIteratively(50);
-console.log(t.toArray());
-console.log(`min: ${findMinInBST(t.root.left).value}`);
+t.insertIteratively(3);
+//t.insertIteratively(7);
+//console.log(t.toArray());
+//console.log(`min: ${findMinInBST(t.root.left).value}`);
+console.log(`Before remove: ${t.DFSInOrder()}`);
+t.remove(5);
+console.log(`After remove : ${t.DFSInOrder()}`);
