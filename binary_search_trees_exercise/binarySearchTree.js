@@ -318,23 +318,31 @@ BinarySearchTree.prototype.printFail = function () {
 }
 
 /**
+ * Create and return a string with numOfSpaces spaces
+ * @param {number} numOfSpaces Number of spaces to make
+ */
+function makeSpaces(numOfSpaces = 1) {
+    return Array(numOfSpaces+1).join(' '); // +1 because of how the join mechanism works
+}
+
+/**
  * Recursive function to calculate and fill the Node.spaces as preparation for print
  * function returns the number of spaces this root has
  * @param {Node} root the root node
  * @param {number} depth depth to give to the root, and yield to it's branch
  */
-BinarySearchTree.prototype.calculateSpaces = function (root = this.root, depth=1) {
+BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.root, depth = 1) {
     // if root not exist - return 0. (not suppose to happen - just to be robust)
     if (!root) return 0;
-    root.depth=depth;
+    root.depth = depth;
     // if leaf - return the value's length
     if (!root.left && !root.right) {
-        root.spaces = root.value.toString().length;
+        root.spaces = root.value.toString().length + padding; // + padding for more spacing on the bottom leaf nodes
         return root.spaces;
     }
-    if (root.left) root.spaces += this.calculateSpaces(root.left, root.depth + 1); // recursive call to left branch
-    if (root.right) root.spaces += this.calculateSpaces(root.right, root.depth + 1); // recursive call to right branch
-    root.spaces += root.value.toString().length; // add the nodes value width 
+    if (root.left) root.spaces += this.calculateSpaces(padding, root.left, root.depth + 1); // recursive call to left branch
+    if (root.right) root.spaces += this.calculateSpaces(padding, root.right, root.depth + 1); // recursive call to right branch
+    root.spaces += root.value.toString().length + padding; // add the node's value width + 1 spacing
     return root.spaces;
 }
 
@@ -343,7 +351,8 @@ BinarySearchTree.prototype.calculateSpaces = function (root = this.root, depth=1
  */
 BinarySearchTree.prototype.print = function () {
     if (!this.root) return; // root node does not exist
-    this.calculateSpaces();
+    const PADDING = 1;
+    this.calculateSpaces(PADDING);
     // print the tree
     let line = '';
     // will try to use "Breadth First Traverse"
@@ -360,12 +369,14 @@ BinarySearchTree.prototype.print = function () {
             lastDepth = n.depth;
         }
         if (n.left) {
-            line += Array(n.left.spaces).join(' '); // create spaces of left branch
+            line += makeSpaces(n.left.spaces); // create spaces of left branch. +1 to create the basic shift
             q.push(n.left); // push the branch in the queue
         }
+        line += makeSpaces(PADDING);
         line += n.value; // log the value itself
+        line += makeSpaces(PADDING);
         if (n.right) {
-            line += Array(n.right.spaces).join(' '); // create spaces of right branch
+            line += makeSpaces(n.right.spaces); // create spaces of right branch
             q.push(n.right); // push the branch in the que
         }
     }
@@ -375,22 +386,23 @@ BinarySearchTree.prototype.print = function () {
 
 // debug
 let t = new BinarySearchTree();
-t.insertIteratively(15);
-t.insertIteratively(20);
-t.insertIteratively(10);
-t.insertIteratively(12);
-t.insertIteratively(1);
+// t.insertIteratively(15);
+// t.insertIteratively(20);
+// t.insertIteratively(10);
+// t.insertIteratively(12);
+// t.insertIteratively(1);
+// t.insertIteratively(5);
+// t.insertIteratively(50);
+// t.insertIteratively(60);
+// t.insertIteratively(30);
+// t.insertIteratively(25);
+// t.insertIteratively(23);
+// t.insertIteratively(24);
+// t.insertIteratively(70);
+// t.insertIteratively(55);
+t.insertIteratively(3);
 t.insertIteratively(5);
-t.insertIteratively(50);
-t.insertIteratively(60);
-t.insertIteratively(30);
-t.insertIteratively(25);
-t.insertIteratively(23);
-t.insertIteratively(24);
-t.insertIteratively(70);
-t.insertIteratively(55);
-//t.insertIteratively(3);
-//t.insertIteratively(5);
+t.insertIteratively(7);
 //t.insertIteratively(7);
 //console.log(t.toArray());
 //console.log(`min: ${findMinInBST(t.root.left).value}`);
