@@ -5,6 +5,7 @@ function Node(value) {
     this.value = value;
     this.left = null;
     this.right = null;
+    this.spaces=0; // number of chars in value. this is used for printing the tree
 }
 
 function BinarySearchTree() {
@@ -246,10 +247,10 @@ function findMinInBST(root) {
  */
 BinarySearchTree.prototype.remove = function (val) {
     // find the Node with the value
-    let nodeToRemove = this.findRecursively(val);
-    if (!nodeToRemove) return null; // node does not exist in this tree
+    //let nodeToRemove = this.findRecursively(val);
+    //if (!nodeToRemove) return null; // node does not exist in this tree
     // todo: make a recursive remove node from branch, that also finds the node to be removed
-    removeNode(val, this.root);
+    this.root = removeNode(val, this.root);
 
     function removeNode(val, root) {
         if (val < root.value) {
@@ -275,56 +276,94 @@ BinarySearchTree.prototype.remove = function (val) {
             // 3) 2 childs - return the successor - search the right branch for the left most node (IE: min value) and replace the root note with it
             // find the successor:
             let suc = findMinInBST(root.right);
-
-            // replace the original node:
-            suc.right = removeNode(suc.value, root.right);
-            suc.left = root.left;
-
-            return suc;
+            root.value = suc.value; // replcace the value of the root 
+            // remove suc (which is duplicated now)
+            root.right = removeNode(suc.value, root.right);
         }
-        //return root;
+        return root;
     }
 }
 
-/**
- * Print branch recursive function
- * @param {Node} node the root node from which to begin printing
- */
-BinarySearchTree.prototype.printBranch = function (node) {
-    if (node === null) return;
-    console.log(node.value);
-    if (node.left) this.printBranch(node.left);
-    if (node.right) this.printBranch(node.right);
-}
+
 
 /**
  * Print the Binary Tree to the console
+ * note: doesn't work well at all :-(
+ */
+BinarySearchTree.prototype.printFail = function () {
+    let line = '';
+    let spaces = 60;
+    // will try to use "Breadth First Traverse"
+    let q = [{ node: this.root, spaces: spaces }]; // Queue of nodes
+    while (q.length > 0) {
+        let obj = q.shift();
+        if (obj.node) {
+            // record the value
+            if (obj.spaces != spaces) {
+                // reached new level
+                console.log(line);
+                line = ''; // new line
+                spaces = obj.spaces;
+            }
+            const spcacesFill = Array(Math.floor(obj.spaces)).join(' '); // creates spaces 
+            line += spcacesFill + obj.node.value + spcacesFill;
+            if (obj.node.left || obj.node.right) {
+                obj.node.left ? q.push({ node: obj.node.left, spaces: obj.spaces / 2 }) : q.push({ node: new Node('  '), spaces: obj.spaces / 2 });
+                obj.node.right ? q.push({ node: obj.node.right, spaces: obj.spaces / 2 }) : q.push({ node: new Node('  '), spaces: obj.spaces / 2 });
+            }
+        }
+    }
+    if (line.length > 0) console.log(line); // remains
+}
+
+/**
+ * Recursive function to calculate and fill the Node.spaces as preparation for print
+ * function returns the number of spaces this root has
+ * @param {Node} root the root node
+ */
+BinarySearchTree.prototype.calculateSpaces = function (root=this.root) {
+    // if root not exist - return 0. (not suppose to happen - just to be robust)
+    if (!root) return 0;
+    // if leaf - return the value's length
+    if (!root.left && !root.right) {
+        root.spcaces = root.value.toString().length;
+        return root.spcaces;
+    }
+    if (root.left) root.spaces+=this.calculateSpaces(root.left); // recursive call to left branch
+    if (root.right) root.spaces+=this.calculateSpaces(root.right); // recursive call to right branch
+    root.spaces+=root.value.toString().length; // add the nodes value width 
+}
+
+/**
+ * Prints the tree to the console
  */
 BinarySearchTree.prototype.print = function () {
-    this.printBranch(this.root);
+    this.calculateSpaces();
+    
 }
 
 // debug
 let t = new BinarySearchTree();
-// t.insertIteratively(15);
-// t.insertIteratively(20);
-// t.insertIteratively(10);
-// t.insertIteratively(12);
-// t.insertIteratively(1);
-// t.insertIteratively(5);
-// t.insertIteratively(50);
-// t.insertIteratively(60);
-// t.insertIteratively(30);
-// t.insertIteratively(25);
-// t.insertIteratively(23);
-// t.insertIteratively(24);
-// t.insertIteratively(70);
-// t.insertIteratively(55);
+t.insertIteratively(15);
+t.insertIteratively(20);
+t.insertIteratively(10);
+t.insertIteratively(12);
+t.insertIteratively(1);
 t.insertIteratively(5);
-t.insertIteratively(3);
+t.insertIteratively(50);
+t.insertIteratively(60);
+t.insertIteratively(30);
+t.insertIteratively(25);
+t.insertIteratively(23);
+t.insertIteratively(24);
+t.insertIteratively(70);
+t.insertIteratively(55);
+//t.insertIteratively(3);
+//t.insertIteratively(5);
 //t.insertIteratively(7);
 //console.log(t.toArray());
 //console.log(`min: ${findMinInBST(t.root.left).value}`);
-console.log(`Before remove: ${t.DFSInOrder()}`);
-t.remove(5);
-console.log(`After remove : ${t.DFSInOrder()}`);
+// console.log(`Before remove: ${t.DFSInOrder()}`);
+// t.remove(51);
+// console.log(`After remove : ${t.DFSInOrder()}`);
+t.print();
