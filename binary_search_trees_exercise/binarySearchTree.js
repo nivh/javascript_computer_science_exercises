@@ -5,7 +5,8 @@ function Node(value) {
     this.value = value;
     this.left = null;
     this.right = null;
-    this.spaces=0; // number of chars in value. this is used for printing the tree
+    this.spaces = 0; // number of chars in value. this is used for printing the tree
+    this.depth = 0; // depth of node. root is 1. currently will be filled only for printing purpose
 }
 
 function BinarySearchTree() {
@@ -320,26 +321,56 @@ BinarySearchTree.prototype.printFail = function () {
  * Recursive function to calculate and fill the Node.spaces as preparation for print
  * function returns the number of spaces this root has
  * @param {Node} root the root node
+ * @param {number} depth depth to give to the root, and yield to it's branch
  */
-BinarySearchTree.prototype.calculateSpaces = function (root=this.root) {
+BinarySearchTree.prototype.calculateSpaces = function (root = this.root, depth=1) {
     // if root not exist - return 0. (not suppose to happen - just to be robust)
     if (!root) return 0;
+    root.depth=depth;
     // if leaf - return the value's length
     if (!root.left && !root.right) {
-        root.spcaces = root.value.toString().length;
-        return root.spcaces;
+        root.spaces = root.value.toString().length;
+        return root.spaces;
     }
-    if (root.left) root.spaces+=this.calculateSpaces(root.left); // recursive call to left branch
-    if (root.right) root.spaces+=this.calculateSpaces(root.right); // recursive call to right branch
-    root.spaces+=root.value.toString().length; // add the nodes value width 
+    if (root.left) root.spaces += this.calculateSpaces(root.left, root.depth + 1); // recursive call to left branch
+    if (root.right) root.spaces += this.calculateSpaces(root.right, root.depth + 1); // recursive call to right branch
+    root.spaces += root.value.toString().length; // add the nodes value width 
+    return root.spaces;
 }
 
 /**
  * Prints the tree to the console
  */
 BinarySearchTree.prototype.print = function () {
+    if (!this.root) return; // root node does not exist
     this.calculateSpaces();
-    
+    // print the tree
+    let line = '';
+    // will try to use "Breadth First Traverse"
+    let q = []; // Queue of nodes
+    q.push(this.root);
+    let lastDepth = this.root.depth; // keep last spaces to know when there is a line break
+    while (q.length > 0) {
+        let n = q.shift();
+        // record the value
+        if (n.depth != lastDepth) {
+            // reached new level
+            console.log(line);
+            line = ''; // new line
+            lastDepth = n.depth;
+        }
+        if (n.left) {
+            line += Array(n.left.spaces).join(' '); // create spaces of left branch
+            q.push(n.left); // push the branch in the queue
+        }
+        line += n.value; // log the value itself
+        if (n.right) {
+            line += Array(n.right.spaces).join(' '); // create spaces of right branch
+            q.push(n.right); // push the branch in the que
+        }
+    }
+    if (line.length > 0) console.log(line); // remains
+
 }
 
 // debug
