@@ -7,6 +7,7 @@ function Node(value) {
     this.right = null;
     this.spaces = 0; // number of chars in value. this is used for printing the tree
     this.depth = 0; // depth of node. root is 1. currently will be filled only for printing purpose
+    this.location=0; // location in percent (0.5 is in the middle, 1 is on the most right). will be calculated only in print phase
 }
 
 function BinarySearchTree() {
@@ -326,6 +327,16 @@ function makeSpaces(numOfSpaces = 1) {
 }
 
 /**
+ * Calculate the horizontal location and depth of each node in the tree
+ * @param {Node} root the root node
+ * @param {number} depth depth to give to the root, and yield to it's children + 1
+ * @param {number} location horizontal location to give to the root, and path forward to it's children with skew
+ */
+BinarySearchTree.prototype.calculateLocation = function (root=this.root, depth=1, location=0.5) {
+    if (!root) return
+}
+
+/**
  * Recursive function to calculate and fill the Node.spaces as preparation for print
  * function returns the number of spaces this root has
  * @param {Node} root the root node
@@ -349,7 +360,7 @@ BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.
 /**
  * Prints the tree to the console
  */
-BinarySearchTree.prototype.print = function () {
+BinarySearchTree.prototype.printNotSoGood2 = function () {
     if (!this.root) return; // root node does not exist
     const PADDING = 1;
     this.calculateSpaces(PADDING);
@@ -371,6 +382,8 @@ BinarySearchTree.prototype.print = function () {
         if (n.left) {
             line += makeSpaces(n.left.spaces); // create spaces of left branch. +1 to create the basic shift
             q.push(n.left); // push the branch in the queue
+        } else {
+            line+=makeSpaces(PADDING*3); // space of parent node?
         }
         line += makeSpaces(PADDING);
         line += n.value; // log the value itself
@@ -381,8 +394,9 @@ BinarySearchTree.prototype.print = function () {
         }
     }
     if (line.length > 0) console.log(line); // remains
-
 }
+
+
 
 // debug
 let t = new BinarySearchTree();
