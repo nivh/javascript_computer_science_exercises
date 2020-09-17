@@ -7,7 +7,7 @@ function Node(value) {
     this.right = null;
     this.spaces = 0; // number of chars in value. this is used for printing the tree
     this.depth = 0; // depth of node. root is 1. currently will be filled only for printing purpose
-    this.location=0; // location in percent (0.5 is in the middle, 1 is on the most right). will be calculated only in print phase
+    this.location = 0; // location in spaces. will be calculated only in print phase. will be used to transfer to tight child, so it will begin from there.
 }
 
 function BinarySearchTree() {
@@ -144,10 +144,10 @@ BinarySearchTree.prototype.findRecursively = function (val) {
 BinarySearchTree.prototype.toArray = function () {
     if (this.root === null) return [];
     return nodeToArray(this.root);
-	/**
-	 * recursive function to convert a binary tree to array
-	 * @param {Node} rootNode Root node of tree to convert to array
-	 */
+    /**
+     * recursive function to convert a binary tree to array
+     * @param {Node} rootNode Root node of tree to convert to array
+     */
     function nodeToArray(rootNode) {
         let leftSide = [];
         let rightSide = [];
@@ -323,18 +323,9 @@ BinarySearchTree.prototype.printFail = function () {
  * @param {number} numOfSpaces Number of spaces to make
  */
 function makeSpaces(numOfSpaces = 1) {
-    return Array(numOfSpaces+1).join(' '); // +1 because of how the join mechanism works
+    return Array(numOfSpaces + 1).join(' '); // +1 because of how the join mechanism works
 }
 
-/**
- * Calculate the horizontal location and depth of each node in the tree
- * @param {Node} root the root node
- * @param {number} depth depth to give to the root, and yield to it's children + 1
- * @param {number} location horizontal location to give to the root, and path forward to it's children with skew
- */
-BinarySearchTree.prototype.calculateLocation = function (root=this.root, depth=1, location=0.5) {
-    if (!root) return
-}
 
 /**
  * Recursive function to calculate and fill the Node.spaces as preparation for print
@@ -342,25 +333,29 @@ BinarySearchTree.prototype.calculateLocation = function (root=this.root, depth=1
  * @param {Node} root the root node
  * @param {number} depth depth to give to the root, and yield to it's branch
  */
-BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.root, depth = 1) {
+BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.root, depth = 1, initialSpaces = 0) {
     // if root not exist - return 0. (not suppose to happen - just to be robust)
     if (!root) return 0;
     root.depth = depth;
-    // if leaf - return the value's length
-    if (!root.left && !root.right) {
-        root.spaces = root.value.toString().length + padding; // + padding for more spacing on the bottom leaf nodes
-        return root.spaces;
+    root.spaces = initialSpaces;
+
+    if (root.left) {
+        // there is a left child - recursive call to calculate left spaces:
+        root.spaces += this.calculateSpaces(padding, root.left, root.depth + 1, 0); // recursive call to left branch
     }
-    if (root.left) root.spaces += this.calculateSpaces(padding, root.left, root.depth + 1); // recursive call to left branch
-    if (root.right) root.spaces += this.calculateSpaces(padding, root.right, root.depth + 1); // recursive call to right branch
     root.spaces += root.value.toString().length + padding; // add the node's value width + 1 spacing
+    if (root.right) {
+        // there is a right child. pass the current spaces for it's initialSpaces + 1
+        this.calculateSpaces(padding, root.right, root.depth + 1, root.spaces + 1); // recursive call to right branch
+    }
+
     return root.spaces;
 }
 
 /**
  * Prints the tree to the console
  */
-BinarySearchTree.prototype.printNotSoGood2 = function () {
+BinarySearchTree.prototype.print = function () {
     if (!this.root) return; // root node does not exist
     const PADDING = 1;
     this.calculateSpaces(PADDING);
@@ -382,14 +377,12 @@ BinarySearchTree.prototype.printNotSoGood2 = function () {
         if (n.left) {
             line += makeSpaces(n.left.spaces); // create spaces of left branch. +1 to create the basic shift
             q.push(n.left); // push the branch in the queue
-        } else {
-            line+=makeSpaces(PADDING*3); // space of parent node?
         }
-        line += makeSpaces(PADDING);
+        line += makeSpaces(n.spaces);
         line += n.value; // log the value itself
         line += makeSpaces(PADDING);
         if (n.right) {
-            line += makeSpaces(n.right.spaces); // create spaces of right branch
+            //line += makeSpaces(n.right.spaces); // create spaces of right branch
             q.push(n.right); // push the branch in the que
         }
     }
@@ -414,9 +407,9 @@ let t = new BinarySearchTree();
 // t.insertIteratively(24);
 // t.insertIteratively(70);
 // t.insertIteratively(55);
+t.insertIteratively(7);
 t.insertIteratively(3);
 t.insertIteratively(5);
-t.insertIteratively(7);
 //t.insertIteratively(7);
 //console.log(t.toArray());
 //console.log(`min: ${findMinInBST(t.root.left).value}`);
