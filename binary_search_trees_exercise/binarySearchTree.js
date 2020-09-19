@@ -348,16 +348,16 @@ BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.
 	// if root not exist - return 0. (not suppose to happen - just to be robust)
 	if (!root) return 0;
 	root.depth = depth;
-	root.spaces = initialSpaces;
-
+	// root.spaces = initialSpaces;
+	root.spaces = root.value.toString().length + padding; // add the node's value width + padding
 	if (root.left) {
 		// there is a left child - recursive call to calculate left spaces:
 		root.spaces += this.calculateSpaces(padding, root.left, root.depth + 1, 0); // recursive call to left branch
 	}
-	root.spaces += root.value.toString().length + padding; // add the node's value width + 1 spacing
 	if (root.right) {
 		// there is a right child. pass the current spaces for it's initialSpaces + 1
-		this.calculateSpaces(padding, root.right, root.depth + 1, root.spaces + 1); // recursive call to right branch
+		// this.calculateSpaces(padding, root.right, root.depth + 1, root.spaces + 1); // recursive call to right branch
+		root.spaces += this.calculateSpaces(padding, root.right, root.depth + 1, 0); // recursive call to right branch
 	}
 
 	return root.spaces;
@@ -371,22 +371,26 @@ BinarySearchTree.prototype.print = function () {
 	const PADDING = 1;
 	this.calculateSpaces(PADDING);
 	// print the tree
-	let line = '';
+	let line = ''; // the tree data line
+	let art = ''; // the lines art line
 	// will try to use "Breadth First Traverse"
 	let q = []; // Queue of nodes
 	q.push(this.root);
-	let lastDepth = this.root.depth; // keep last spaces to know when there is a line break
+	let lastDepth = this.root.depth; // keep last depth to know when there is a line break
 	while (q.length > 0) {
 		let n = q.shift();
 		// record the value
 		if (n.depth != lastDepth) {
 			// reached new level
 			console.log(line);
+			console.log(art);
 			line = ''; // new line
+			art = ''; // new art line
 			lastDepth = n.depth;
 		}
 		if (n.left) {
 			line += makeSpaces(n.left.spaces); // create spaces of left branch. +1 to create the basic shift
+			art+=LINE_DOWN_RIGHT+LINE_LEFT_RIGHT.repeat(n.left.spaces - 1);
 			q.push(n.left); // push the branch in the queue
 		}
 		line += makeSpaces(n.spaces);
@@ -419,9 +423,9 @@ let t = new BinarySearchTree();
 // t.insertIteratively(70);
 // t.insertIteratively(55);
 
-t.insertIteratively(7);
 t.insertIteratively(3);
 t.insertIteratively(5);
+t.insertIteratively(7);
 
 // t.insertIteratively(10);
 // t.insertIteratively(5);
