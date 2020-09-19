@@ -1,6 +1,7 @@
 // @ts-check
 "use strict"
 // draw unicode frame chars consts:
+// https://unicode-table.com/en/#2513
 const LINE_UP_LEFT_RIGHT = '\u253B'; 	// ┻
 const LINE_LEFT_RIGHT = '\u2501'; 		// ━
 const LINE_DOWN_RIGHT = '\u250F'; 		// ┏
@@ -418,20 +419,21 @@ let t = new BinarySearchTree();
 // t.insertIteratively(70);
 // t.insertIteratively(55);
 
-// t.insertIteratively(7);
-// t.insertIteratively(3);
-// t.insertIteratively(5);
-t.insertIteratively(10);
-t.insertIteratively(5);
 t.insertIteratively(7);
-t.insertIteratively(6);
-t.insertIteratively(119);
-t.insertIteratively(11111);
-t.insertIteratively(22222);
-t.insertIteratively(1);
-t.insertIteratively(16);
-t.insertIteratively(12);
-t.insertIteratively(19);
+t.insertIteratively(3);
+t.insertIteratively(5);
+
+// t.insertIteratively(10);
+// t.insertIteratively(5);
+// t.insertIteratively(7);
+// t.insertIteratively(6);
+// t.insertIteratively(119);
+// t.insertIteratively(11111);
+// t.insertIteratively(22222);
+// t.insertIteratively(1);
+// t.insertIteratively(16);
+// t.insertIteratively(12);
+// t.insertIteratively(19);
 
 
 //console.log(t.toArray());
