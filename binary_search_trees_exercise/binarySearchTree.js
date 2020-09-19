@@ -9,8 +9,8 @@ const LINE_DOWN_LEFT = '\u2513'; 		// ┓
 const LINE_UP_RIGHT = '\u2517'; 		// ┗
 const LINE_UP_LEFT = '\u251B'; 			// ┛
 
-console.log(LINE_DOWN_RIGHT + LINE_UP_LEFT_RIGHT + LINE_LEFT_RIGHT + LINE_DOWN_LEFT); 	// ┏┻━┓
-console.log(LINE_UP_LEFT + '  ' + LINE_UP_RIGHT);										// ┛  ┗
+// console.log(LINE_DOWN_RIGHT + LINE_UP_LEFT_RIGHT + LINE_LEFT_RIGHT + LINE_DOWN_LEFT); 	// ┏┻━┓
+// console.log(LINE_UP_LEFT + '  ' + LINE_UP_RIGHT);										// ┛  ┗
 
 function Node(value) {
 	this.value = value;
@@ -348,8 +348,9 @@ BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.
 	// if root not exist - return 0. (not suppose to happen - just to be robust)
 	if (!root) return 0;
 	root.depth = depth;
-	// root.spaces = initialSpaces;
-	root.spaces = root.value.toString().length + padding; // add the node's value width + padding
+	root.spaces = initialSpaces;
+	// root.spaces = 0;
+	root.spaces += root.value.toString().length + padding; // add the node's value width + padding
 	if (root.left) {
 		// there is a left child - recursive call to calculate left spaces:
 		root.spaces += this.calculateSpaces(padding, root.left, root.depth + 1, 0); // recursive call to left branch
@@ -390,18 +391,23 @@ BinarySearchTree.prototype.print = function () {
 		}
 		if (n.left) {
 			line += makeSpaces(n.left.spaces); // create spaces of left branch. +1 to create the basic shift
-			art+=LINE_DOWN_RIGHT+LINE_LEFT_RIGHT.repeat(n.left.spaces - 1);
+			art += ' '.repeat(Math.floor(n.left.spaces / 2) - 1 ) + LINE_DOWN_RIGHT + LINE_LEFT_RIGHT.repeat(n.left.spaces / 2 );
 			q.push(n.left); // push the branch in the queue
 		}
-		line += makeSpaces(n.spaces);
+		//line += makeSpaces(n.spaces);
 		line += n.value; // log the value itself
 		line += makeSpaces(PADDING);
+		if (n.right && n.left) art += LINE_UP_LEFT_RIGHT; // 2 childs
+		else if (n.right) art += LINE_UP_RIGHT; // right child
+		else if (n.left) art += LINE_UP_LEFT; // left child
 		if (n.right) {
-			//line += makeSpaces(n.right.spaces); // create spaces of right branch
+			line += makeSpaces(n.right.spaces); // create spaces of right branch
+			art += LINE_LEFT_RIGHT.repeat(n.right.spaces-1) + LINE_DOWN_LEFT;
 			q.push(n.right); // push the branch in the que
 		}
 	}
 	if (line.length > 0) console.log(line); // remains
+	//if (art.length > 0) console.log(art); // remains
 }
 
 
@@ -423,9 +429,10 @@ let t = new BinarySearchTree();
 // t.insertIteratively(70);
 // t.insertIteratively(55);
 
-t.insertIteratively(3);
-t.insertIteratively(5);
 t.insertIteratively(7);
+t.insertIteratively(5);
+t.insertIteratively(3);
+t.insertIteratively(9);
 
 // t.insertIteratively(10);
 // t.insertIteratively(5);
