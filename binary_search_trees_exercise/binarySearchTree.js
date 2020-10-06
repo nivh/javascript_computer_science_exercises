@@ -391,6 +391,7 @@ BinarySearchTree.prototype.print = function () {
 			q.push(n.left); // push the branch in the queue
 		}
 		line += ' '.repeat(n.indent);
+		art += ' '.repeat(n.indent);
 		line += n.value; // log the value itself
 		// line += ' '.repeat(GAP);
 		if (n.right && n.left) 	art += LINE_UP_LEFT_RIGHT; // 2 childs
@@ -424,11 +425,13 @@ let t = new BinarySearchTree();
 // t.insertIteratively(24);
 // t.insertIteratively(70);
 // t.insertIteratively(55);
-
+t.insertIteratively(9);
+t.insertIteratively(7);
 t.insertIteratively(5);
-t.insertIteratively(3);
-// t.insertIteratively(7);
-//t.insertIteratively(9);
+t.insertIteratively(40);
+t.insertIteratively(555);
+t.insertIteratively(8);
+
 
 // t.insertIteratively(10);
 // t.insertIteratively(5);
