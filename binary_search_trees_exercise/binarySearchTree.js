@@ -17,8 +17,8 @@ function TreeNode(value) {
 	this.left = null;
 	this.right = null;
 	this.depth = 0; // depth of TreeNode. root is 1. currently will be filled only for printing purpose
-	this.spaces = 0; // data line. this is used for printing the tree.
-	this.art = 0; // art lines. will be calculated only in print phase.
+	this.width = 0; // total width of the Node. this is used for printing the tree.
+	this.location = 0; // location of the parent Node link
 }
 
 function BinarySearchTree() {
@@ -342,30 +342,27 @@ function makeSpaces(numOfSpaces = 1) {
  * @param {TreeNode} root the root TreeNode
  * @param {number} depth depth to give to the root, and yield to it's branch
  */
-BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.root, depth = 1) {
+BinarySearchTree.prototype.calculateSpaces = function (gap = 1, root = this.root, depth = 1) {
 	// if root not exist - return 0. (not suppose to happen - just to be robust)
 	if (!root) return 0;
 	root.depth = depth;
-	root.spaces = '';
-	root.art = '';
-	
+	root.width = 0;
+	root.location = 0;
+
 	if (root.left) {
 		// there is a left child - recursive call to calculate left spaces:
-		let leftWidth = this.calculateSpaces(padding, root.left, root.depth + 1); // recursive call to left branch
-		root.spaces += ' '.repeat(leftWidth); 
-		root.art += ' '.repeat(leftWidth);
+		root.width += this.calculateSpaces(gap, root.left, root.depth + 1); // recursive call to left branch
+		root.location=root.width; // location of the parent link is to the right of the left branch
 	}
-	let paddedValue = root.value.toString() + ' '.repeat(padding); // add the TreeNode's value width + padding
-	root.spaces += paddedValue;
-	root.art += ' '.repeat(paddedValue.length / 2)
-
 	if (root.right) {
 		// there is a right child. pass the current spaces for it's initialSpaces + 1
-		// this.calculateSpaces(padding, root.right, root.depth + 1, root.spaces + 1); // recursive call to right branch
-		root.spaces += this.calculateSpaces(padding, root.right, root.depth + 1); // recursive call to right branch
+		// this.calculateSpaces(gap, root.right, root.depth + 1, root.spaces + 1); // recursive call to right branch
+		root.width += this.calculateSpaces(gap, root.right, root.depth + 1); // recursive call to right branch
 	}
-
-	return root.spaces.length;
+	if (root.right || root.left) root.width += gap; // add the gap if there is at least one child node
+	root.width = Math.max(root.value.length, root.width); // width will be whatever is bigger: the value's length, or both sides
+	root.location+=Math.floor(root.value/2); // add half of the value width to the location, so it points in the middle of it
+	return root.width;
 }
 
 /**
@@ -373,8 +370,8 @@ BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.
  */
 BinarySearchTree.prototype.print = function () {
 	if (!this.root) return; // root TreeNode does not exist
-	const PADDING = 1;
-	this.calculateSpaces(PADDING);
+	const GAP = 1;
+	this.calculateSpaces(GAP);
 	// print the tree
 	let line = ''; // the tree data line
 	let art = ''; // the lines art line
@@ -395,18 +392,18 @@ BinarySearchTree.prototype.print = function () {
 		}
 		if (n.left) {
 			line += makeSpaces(n.left.spaces); // create spaces of left branch. +1 to create the basic shift
-			art += ' '.repeat(Math.floor(n.left.spaces / 2) - 1 ) + LINE_DOWN_RIGHT + LINE_LEFT_RIGHT.repeat(n.left.spaces / 2 );
+			art += ' '.repeat(Math.floor(n.left.spaces / 2) - 1) + LINE_DOWN_RIGHT + LINE_LEFT_RIGHT.repeat(n.left.spaces / 2);
 			q.push(n.left); // push the branch in the queue
 		}
 		//line += makeSpaces(n.spaces);
 		line += n.value; // log the value itself
-		line += makeSpaces(PADDING);
+		line += makeSpaces(GAP);
 		if (n.right && n.left) art += LINE_UP_LEFT_RIGHT; // 2 childs
 		else if (n.right) art += LINE_UP_RIGHT; // right child
 		else if (n.left) art += LINE_UP_LEFT; // left child
 		if (n.right) {
 			line += makeSpaces(n.right.spaces); // create spaces of right branch
-			art += LINE_LEFT_RIGHT.repeat(n.right.spaces-1) + LINE_DOWN_LEFT;
+			art += LINE_LEFT_RIGHT.repeat(n.right.spaces - 1) + LINE_DOWN_LEFT;
 			q.push(n.right); // push the branch in the que
 		}
 	}
