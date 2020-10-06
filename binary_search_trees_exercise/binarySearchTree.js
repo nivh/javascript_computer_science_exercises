@@ -12,13 +12,13 @@ const LINE_UP_LEFT = '\u251B'; 			// ┛
 // console.log(LINE_DOWN_RIGHT + LINE_UP_LEFT_RIGHT + LINE_LEFT_RIGHT + LINE_DOWN_LEFT); 	// ┏┻━┓
 // console.log(LINE_UP_LEFT + '  ' + LINE_UP_RIGHT);										// ┛  ┗
 
-function Node(value) {
+function TreeNode(value) {
 	this.value = value;
 	this.left = null;
 	this.right = null;
-	this.spaces = 0; // number of chars in value. this is used for printing the tree
-	this.depth = 0; // depth of node. root is 1. currently will be filled only for printing purpose
-	this.location = 0; // location in spaces. will be calculated only in print phase. will be used to transfer to tight child, so it will begin from there.
+	this.depth = 0; // depth of TreeNode. root is 1. currently will be filled only for printing purpose
+	this.spaces = 0; // data line. this is used for printing the tree.
+	this.art = 0; // art lines. will be calculated only in print phase.
 }
 
 function BinarySearchTree() {
@@ -26,16 +26,16 @@ function BinarySearchTree() {
 }
 
 /**
- * This function should insert a node in a binary tree. 
+ * This function should insert a TreeNode in a binary tree. 
  * This should be solved using iteration.
  * @param {any} val Value to insert to the tree
  */
 BinarySearchTree.prototype.insertIteratively = function (val) {
 	// @ts-ignore
-	let newNode = new Node(val);
+	let newTreeNode = new TreeNode(val);
 	let n = this.root;
 	if (n === null) {
-		this.root = newNode;
+		this.root = newTreeNode;
 		return this;
 	}
 	while (true) {
@@ -48,7 +48,7 @@ BinarySearchTree.prototype.insertIteratively = function (val) {
 				n = n.left;
 			} else {
 				// @ts-ignore
-				n.left = newNode;
+				n.left = newTreeNode;
 				return this;
 			}
 		} else {
@@ -58,7 +58,7 @@ BinarySearchTree.prototype.insertIteratively = function (val) {
 				// @ts-ignore
 				n = n.right;
 			} else {
-				n.right = newNode;
+				n.right = newTreeNode;
 				return this;
 			}
 		}
@@ -66,36 +66,36 @@ BinarySearchTree.prototype.insertIteratively = function (val) {
 }
 
 /**
- * insert a node in a binary tree. 
+ * insert a TreeNode in a binary tree. 
  * This should be solved using recursion.
  * @param {any} val value to insert to the tree
  */
 BinarySearchTree.prototype.insertRecursively = function (val) {
-	let newNode = new Node(val);
+	let newTreeNode = new TreeNode(val);
 	if (this.root === null) {
-		this.root = newNode;
+		this.root = newTreeNode;
 		return this;
 	}
-	insertNode(newNode, this.root);
+	insertTreeNode(newTreeNode, this.root);
 	return this;
 	/**
-	 * Recursive function to insert a value into a general root node
-	 * @param {Node} newNode new node to insert
-	 * @param {Node} rootNode root node of tree
+	 * Recursive function to insert a value into a general root TreeNode
+	 * @param {TreeNode} newTreeNode new TreeNode to insert
+	 * @param {TreeNode} rootTreeNode root TreeNode of tree
 	 */
-	function insertNode(newNode, rootNode) {
-		if (newNode.value < rootNode.value) {
+	function insertTreeNode(newTreeNode, rootTreeNode) {
+		if (newTreeNode.value < rootTreeNode.value) {
 			// search left branch
-			rootNode.left ? insertNode(newNode, rootNode.left) : rootNode.left = newNode;
+			rootTreeNode.left ? insertTreeNode(newTreeNode, rootTreeNode.left) : rootTreeNode.left = newTreeNode;
 		} else {
-			rootNode.right ? insertNode(newNode, rootNode.right) : rootNode.right = newNode;
+			rootTreeNode.right ? insertTreeNode(newTreeNode, rootTreeNode.right) : rootTreeNode.right = newTreeNode;
 		}
 	}
 }
 
 /**
- * find a node in a binary tree. 
- * It should return the node if found, otherwise return `undefined`. 
+ * find a TreeNode in a binary tree. 
+ * It should return the TreeNode if found, otherwise return `undefined`. 
  * This should be solved using iteration.
  * @param {any} val value to search
  */
@@ -122,26 +122,26 @@ BinarySearchTree.prototype.findIteratively = function (val) {
 }
 
 BinarySearchTree.prototype.findRecursively = function (val) {
-	return findNode(val, this.root);
+	return findTreeNode(val, this.root);
 	/**
-	 * Recursive function to find a value in a BinarySearchTree starting with rootNode
-	 * returns the Node if found, otherwise: undefined
+	 * Recursive function to find a value in a BinarySearchTree starting with rootTreeNode
+	 * returns the TreeNode if found, otherwise: undefined
 	 * @param {any} val value to find
-	 * @param {Node} rootNode Starting root node
+	 * @param {TreeNode} rootTreeNode Starting root TreeNode
 	 */
-	function findNode(val, rootNode) {
-		if (val === rootNode.value) return rootNode;
-		if (val < rootNode.value) {
+	function findTreeNode(val, rootTreeNode) {
+		if (val === rootTreeNode.value) return rootTreeNode;
+		if (val < rootTreeNode.value) {
 			// left branch
-			if (rootNode.left) {
-				return findNode(val, rootNode.left);
+			if (rootTreeNode.left) {
+				return findTreeNode(val, rootTreeNode.left);
 			} else {
 				return undefined;
 			}
 		} else {
 			// right branch
-			if (rootNode.right) {
-				return findNode(val, rootNode.right);
+			if (rootTreeNode.right) {
+				return findTreeNode(val, rootTreeNode.right);
 			} else {
 				return undefined;
 			}
@@ -150,81 +150,81 @@ BinarySearchTree.prototype.findRecursively = function (val) {
 }
 
 /**
- * convert a binary search tree into an array of nodes from smallest to largest.
+ * convert a binary search tree into an array of TreeNodes from smallest to largest.
  */
 BinarySearchTree.prototype.toArray = function () {
 	if (this.root === null) return [];
-	return nodeToArray(this.root);
+	return TreeNodeToArray(this.root);
 	/**
 	 * recursive function to convert a binary tree to array
-	 * @param {Node} rootNode Root node of tree to convert to array
+	 * @param {TreeNode} rootTreeNode Root TreeNode of tree to convert to array
 	 */
-	function nodeToArray(rootNode) {
+	function TreeNodeToArray(rootTreeNode) {
 		let leftSide = [];
 		let rightSide = [];
-		if (rootNode.left) {
-			leftSide = nodeToArray(rootNode.left);
+		if (rootTreeNode.left) {
+			leftSide = TreeNodeToArray(rootTreeNode.left);
 		}
-		if (rootNode.right) {
-			rightSide = nodeToArray(rootNode.right);
+		if (rootTreeNode.right) {
+			rightSide = TreeNodeToArray(rootTreeNode.right);
 		}
-		leftSide.push(rootNode.value); // add the root node itself...
+		leftSide.push(rootTreeNode.value); // add the root TreeNode itself...
 		return leftSide.concat(rightSide); // return left + root + right
 	}
 }
 
 /**
- * search through each node in the binary search tree using pre-order depth first search and 
- * return an array containing each node's value.
+ * search through each TreeNode in the binary search tree using pre-order depth first search and 
+ * return an array containing each TreeNode's value.
  */
 BinarySearchTree.prototype.DFSPreOrder = function () {
 	let arr = [];
 	if (this.root) traverse(this.root);
 	return arr;
-	function traverse(rootNode) {
-		if (rootNode) arr.push(rootNode.value); // record the value
-		if (rootNode.left) traverse(rootNode.left); // traverse the left branch
-		if (rootNode.right) traverse(rootNode.right); // traverse the right branch
+	function traverse(rootTreeNode) {
+		if (rootTreeNode) arr.push(rootTreeNode.value); // record the value
+		if (rootTreeNode.left) traverse(rootTreeNode.left); // traverse the left branch
+		if (rootTreeNode.right) traverse(rootTreeNode.right); // traverse the right branch
 	}
 }
 
 /**
- * search through each node in the binary search tree using in-order depth first search and 
- * return an array containing each node's value.
+ * search through each TreeNode in the binary search tree using in-order depth first search and 
+ * return an array containing each TreeNode's value.
  */
 BinarySearchTree.prototype.DFSInOrder = function () {
 	let arr = [];
 	if (this.root) traverse(this.root);
 	return arr;
-	function traverse(rootNode) {
-		if (rootNode.left) traverse(rootNode.left); // traverse the left branch
-		if (rootNode) arr.push(rootNode.value); // record the value
-		if (rootNode.right) traverse(rootNode.right); // traverse the right branch
+	function traverse(rootTreeNode) {
+		if (rootTreeNode.left) traverse(rootTreeNode.left); // traverse the left branch
+		if (rootTreeNode) arr.push(rootTreeNode.value); // record the value
+		if (rootTreeNode.right) traverse(rootTreeNode.right); // traverse the right branch
 	}
 }
 
 /**
- * search through each node in the binary search tree using post-order depth first search and 
- * return an array containing each node's value.
+ * search through each TreeNode in the binary search tree using post-order depth first search and 
+ * return an array containing each TreeNode's value.
  */
 BinarySearchTree.prototype.DFSPostOrder = function () {
 	let arr = [];
 	if (this.root) traverse(this.root);
 	return arr;
-	function traverse(rootNode) {
-		if (rootNode.left) traverse(rootNode.left); // traverse the left branch
-		if (rootNode.right) traverse(rootNode.right); // traverse the right branch
-		if (rootNode) arr.push(rootNode.value); // record the value
+	function traverse(rootTreeNode) {
+		if (rootTreeNode.left) traverse(rootTreeNode.left); // traverse the left branch
+		if (rootTreeNode.right) traverse(rootTreeNode.right); // traverse the right branch
+		if (rootTreeNode) arr.push(rootTreeNode.value); // record the value
 	}
 }
 
 /**
- * search through each node in the binary search tree using breadth first search and 
- * return an array containing each node's value.
+ * search through each TreeNode in the binary search tree using breadth first search and 
+ * return an array containing each TreeNode's value.
  */
 BinarySearchTree.prototype.breadthFirstSearch = function () {
 	let arr = [];
-	let q = [this.root]; // Queue of nodes
+	let q = [this.root]; // Queue of TreeNodes
 	while (q.length > 0) {
 		let n = q.shift();
 		if (n) {
@@ -238,10 +238,10 @@ BinarySearchTree.prototype.breadthFirstSearch = function () {
 }
 
 /**
- * finds and returns the Node with the minimum value on a branch.
- * (this is similar to finding the left most node within a branch);
+ * finds and returns the TreeNode with the minimum value on a branch.
+ * (this is similar to finding the left most TreeNode within a branch);
  * this is a helper function for remove() method.
- * @param {Node} root the root of the branch to search
+ * @param {TreeNode} root the root of the branch to search
  */
 function findMinInBST(root) {
 	if (!root) return null;
@@ -253,31 +253,31 @@ function findMinInBST(root) {
 }
 
 /**
- * This function should remove a node from a binary search tree recursively
- * Your remove function should be able to handle removal of the root node, removal of a node with one child and removal of a node with two children. 
- * The function should return the node removed.
+ * This function should remove a TreeNode from a binary search tree recursively
+ * Your remove function should be able to handle removal of the root TreeNode, removal of a TreeNode with one child and removal of a TreeNode with two children. 
+ * The function should return the TreeNode removed.
  * @param {any} val value to remove from the tree
  */
 BinarySearchTree.prototype.remove = function (val) {
-	// find the Node with the value
-	//let nodeToRemove = this.findRecursively(val);
-	//if (!nodeToRemove) return null; // node does not exist in this tree
-	// todo: make a recursive remove node from branch, that also finds the node to be removed
-	this.root = removeNode(val, this.root);
+	// find the TreeNode with the value
+	//let TreeNodeToRemove = this.findRecursively(val);
+	//if (!TreeNodeToRemove) return null; // TreeNode does not exist in this tree
+	// todo: make a recursive remove TreeNode from branch, that also finds the TreeNode to be removed
+	this.root = removeTreeNode(val, this.root);
 
-	function removeNode(val, root) {
+	function removeTreeNode(val, root) {
 		if (val < root.value) {
 			// left branch search
 			if (root.left) {
-				root.left = removeNode(val, root.left);
+				root.left = removeTreeNode(val, root.left);
 			} // else - val does not exist. should do anything?
 		} else if (val > root.value) {
 			// right branch search
 			if (root.right) {
-				root.right = removeNode(val, root.right);
+				root.right = removeTreeNode(val, root.right);
 			} // else - val does not exist. should do anything?
 		} else {
-			// Node to be removed found!
+			// TreeNode to be removed found!
 			// deal with 3 cases:
 			// 1) no childs - just return null
 			if (!root.left && !root.right) return null;
@@ -286,18 +286,16 @@ BinarySearchTree.prototype.remove = function (val) {
 				if (root.left) return root.left;
 				if (root.right) return root.right;
 			}
-			// 3) 2 childs - return the successor - search the right branch for the left most node (IE: min value) and replace the root note with it
+			// 3) 2 childs - return the successor - search the right branch for the left most TreeNode (IE: min value) and replace the root note with it
 			// find the successor:
 			let suc = findMinInBST(root.right);
 			root.value = suc.value; // replcace the value of the root 
 			// remove suc (which is duplicated now)
-			root.right = removeNode(suc.value, root.right);
+			root.right = removeTreeNode(suc.value, root.right);
 		}
 		return root;
 	}
 }
-
-
 
 /**
  * Print the Binary Tree to the console
@@ -307,10 +305,10 @@ BinarySearchTree.prototype.printFail = function () {
 	let line = '';
 	let spaces = 60;
 	// will try to use "Breadth First Traverse"
-	let q = [{ node: this.root, spaces: spaces }]; // Queue of nodes
+	let q = [{ TreeNode: this.root, spaces: spaces }]; // Queue of TreeNodes
 	while (q.length > 0) {
 		let obj = q.shift();
-		if (obj.node) {
+		if (obj.TreeNode) {
 			// record the value
 			if (obj.spaces != spaces) {
 				// reached new level
@@ -319,10 +317,10 @@ BinarySearchTree.prototype.printFail = function () {
 				spaces = obj.spaces;
 			}
 			const spcacesFill = Array(Math.floor(obj.spaces)).join(' '); // creates spaces 
-			line += spcacesFill + obj.node.value + spcacesFill;
-			if (obj.node.left || obj.node.right) {
-				obj.node.left ? q.push({ node: obj.node.left, spaces: obj.spaces / 2 }) : q.push({ node: new Node('  '), spaces: obj.spaces / 2 });
-				obj.node.right ? q.push({ node: obj.node.right, spaces: obj.spaces / 2 }) : q.push({ node: new Node('  '), spaces: obj.spaces / 2 });
+			line += spcacesFill + obj.TreeNode.value + spcacesFill;
+			if (obj.TreeNode.left || obj.TreeNode.right) {
+				obj.TreeNode.left ? q.push({ TreeNode: obj.TreeNode.left, spaces: obj.spaces / 2 }) : q.push({ TreeNode: new TreeNode('  '), spaces: obj.spaces / 2 });
+				obj.TreeNode.right ? q.push({ TreeNode: obj.TreeNode.right, spaces: obj.spaces / 2 }) : q.push({ TreeNode: new TreeNode('  '), spaces: obj.spaces / 2 });
 			}
 		}
 	}
@@ -339,43 +337,49 @@ function makeSpaces(numOfSpaces = 1) {
 
 
 /**
- * Recursive function to calculate and fill the Node.spaces as preparation for print
+ * Recursive function to calculate and fill the TreeNode.spaces as preparation for print
  * function returns the number of spaces this root has
- * @param {Node} root the root node
+ * @param {TreeNode} root the root TreeNode
  * @param {number} depth depth to give to the root, and yield to it's branch
  */
-BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.root, depth = 1, initialSpaces = 0) {
+BinarySearchTree.prototype.calculateSpaces = function (padding = 1, root = this.root, depth = 1) {
 	// if root not exist - return 0. (not suppose to happen - just to be robust)
 	if (!root) return 0;
 	root.depth = depth;
-	root.spaces = initialSpaces;
-	// root.spaces = 0;
-	root.spaces += root.value.toString().length + padding; // add the node's value width + padding
+	root.spaces = '';
+	root.art = '';
+	
 	if (root.left) {
 		// there is a left child - recursive call to calculate left spaces:
-		root.spaces += this.calculateSpaces(padding, root.left, root.depth + 1, 0); // recursive call to left branch
+		let leftWidth = this.calculateSpaces(padding, root.left, root.depth + 1); // recursive call to left branch
+		root.spaces += ' '.repeat(leftWidth); 
+		root.art += ' '.repeat(leftWidth);
 	}
+	let paddedValue = root.value.toString() + ' '.repeat(padding); // add the TreeNode's value width + padding
+	root.spaces += paddedValue;
+	root.art += ' '.repeat(paddedValue.length / 2)
+
 	if (root.right) {
 		// there is a right child. pass the current spaces for it's initialSpaces + 1
 		// this.calculateSpaces(padding, root.right, root.depth + 1, root.spaces + 1); // recursive call to right branch
-		root.spaces += this.calculateSpaces(padding, root.right, root.depth + 1, 0); // recursive call to right branch
+		root.spaces += this.calculateSpaces(padding, root.right, root.depth + 1); // recursive call to right branch
 	}
 
-	return root.spaces;
+	return root.spaces.length;
 }
 
 /**
  * Prints the tree to the console
  */
 BinarySearchTree.prototype.print = function () {
-	if (!this.root) return; // root node does not exist
+	if (!this.root) return; // root TreeNode does not exist
 	const PADDING = 1;
 	this.calculateSpaces(PADDING);
 	// print the tree
 	let line = ''; // the tree data line
 	let art = ''; // the lines art line
 	// will try to use "Breadth First Traverse"
-	let q = []; // Queue of nodes
+	let q = []; // Queue of TreeNodes
 	q.push(this.root);
 	let lastDepth = this.root.depth; // keep last depth to know when there is a line break
 	while (q.length > 0) {
