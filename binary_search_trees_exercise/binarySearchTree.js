@@ -328,6 +328,18 @@ BinarySearchTree.prototype.printFail = function () {
 	if (line.length > 0) console.log(line); // remains
 }
 
+BinarySearchTree.prototype.anatolyPrint = function (root, pad = 0, level = 0, lines = []) {
+	if (lines.length <= level)
+		lines[level] = "";
+	if (root.left)
+		pad = this.anatolyPrint(root.left, pad, level + 1, lines);
+	lines[level] += " ".repeat(pad - lines[level].length) + root.value;
+	pad = lines[level].length;
+	if (root.right)
+		pad = this.anatolyPrint(root.right, pad, level + 1, lines);
+	return level == 0 ? lines.join('\n') : pad;
+}
+
 
 /**
  * Recursive function to calculate and fill the TreeNode.spaces as preparation for print
@@ -335,26 +347,26 @@ BinarySearchTree.prototype.printFail = function () {
  * @param {TreeNode} root the root TreeNode
  * @param {number} depth depth to give to the root, and yield to it's branch
  */
-BinarySearchTree.prototype.calculateSpaces = function (gap = 1, root = this.root, depth = 1, indent=0) {
+BinarySearchTree.prototype.calculateSpaces = function (gap = 1, root = this.root, depth = 1, indent = 0) {
 	// if root not exist - return 0. (not suppose to happen - just to be robust)
 	if (!root) return 0;
 	root.depth = depth;
 	root.width = 0;
 	root.location = 0;
-	root.indent=indent;
+	root.indent = indent;
 
 	if (root.left) {
 		// there is a left child - recursive call to calculate left spaces:
 		root.width += this.calculateSpaces(gap, root.left, root.depth + 1, 0); // recursive call to left branch
-		root.location = root.width; // location of the parent link is to the right of the left branch
+		root.location = root.width + gap; // location of the parent link is to the right of the left branch
 	}
 	if (root.right || root.left) root.width += gap; // add the gap if there is at least one child node
 	if (root.right) {
 		// there is a right child. pass the current spaces for it's initialSpaces + 1
 		// this.calculateSpaces(gap, root.right, root.depth + 1, root.spaces + 1); // recursive call to right branch
-		root.width += this.calculateSpaces(gap, root.right, root.depth + 1, gap); // recursive call to right branch
+		root.width += this.calculateSpaces(gap, root.right, root.depth + 1, indent + gap); // recursive call to right branch
 	}
-	
+
 	root.width = Math.max(root.value.toString().length, root.width); // width will be whatever is bigger: the value's length, or both sides
 	root.location += Math.floor(root.value.toString().length / 2); // add half of the value width to the location, so it points in the middle of it
 	return root.width;
@@ -387,16 +399,16 @@ BinarySearchTree.prototype.print = function () {
 		}
 		if (n.left) {
 			line += ' '.repeat(n.left.width - Math.floor(n.value.toString().length / 2)); // create spaces of left branch. - half of the value's length (cause location calculated it)
-			art += ' '.repeat(n.left.location) + LINE_DOWN_RIGHT + LINE_LEFT_RIGHT.repeat(n.left.width - n.left.location - 1);
+			art += ' '.repeat(n.left.location) + LINE_DOWN_RIGHT + LINE_LEFT_RIGHT.repeat(n.left.width - n.left.location);
 			q.push(n.left); // push the branch in the queue
 		}
 		line += ' '.repeat(n.indent);
 		art += ' '.repeat(n.indent);
 		line += n.value; // log the value itself
 		// line += ' '.repeat(GAP);
-		if (n.right && n.left) 	art += LINE_UP_LEFT_RIGHT; // 2 childs
-		else if (n.right)		art += LINE_UP_RIGHT; // right child
-		else if (n.left) 		art += LINE_UP_LEFT; // left child
+		if (n.right && n.left) art += LINE_UP_LEFT_RIGHT; // 2 childs
+		else if (n.right) art += LINE_UP_RIGHT; // right child
+		else if (n.left) art += LINE_UP_LEFT; // left child
 		if (n.right) {
 			line += ' '.repeat(n.right.width); // create spaces of right branch
 			art += LINE_LEFT_RIGHT.repeat(n.right.location) + LINE_DOWN_LEFT + ' '.repeat(n.right.width - n.right.location);
@@ -411,26 +423,28 @@ BinarySearchTree.prototype.print = function () {
 
 // debug
 let t = new BinarySearchTree();
-// t.insertIteratively(15);
-// t.insertIteratively(20);
-// t.insertIteratively(10);
-// t.insertIteratively(12);
-// t.insertIteratively(1);
-// t.insertIteratively(5);
-// t.insertIteratively(50);
-// t.insertIteratively(60);
-// t.insertIteratively(30);
-// t.insertIteratively(25);
-// t.insertIteratively(23);
-// t.insertIteratively(24);
-// t.insertIteratively(70);
-// t.insertIteratively(55);
-t.insertIteratively(9);
-t.insertIteratively(7);
+t.insertIteratively(15);
+t.insertIteratively(20);
+t.insertIteratively(10);
+t.insertIteratively(12);
+t.insertIteratively(1);
 t.insertIteratively(5);
-t.insertIteratively(40);
-t.insertIteratively(555);
-t.insertIteratively(8);
+t.insertIteratively(50);
+t.insertIteratively(60);
+t.insertIteratively(30);
+t.insertIteratively(25);
+t.insertIteratively(23);
+t.insertIteratively(24);
+t.insertIteratively(70);
+t.insertIteratively(55);
+
+// t.insertIteratively(9);
+// t.insertIteratively(7);
+// t.insertIteratively(5);
+
+// t.insertIteratively(40);
+// t.insertIteratively(555);
+// t.insertIteratively(8);
 
 
 // t.insertIteratively(10);
@@ -451,5 +465,6 @@ t.insertIteratively(8);
 // console.log(`Before remove: ${t.DFSInOrder()}`);
 // t.remove(51);
 // console.log(`After remove : ${t.DFSInOrder()}`);
-t.print();
+// t.print();
+console.log(t.anatolyPrint(t.root));
 
